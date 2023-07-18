@@ -20,15 +20,15 @@ export class BaseFormatter extends CustomJSHover {
   }
 
   static {
-    this.define<BaseFormatter.Props>(({Number}) => ({
-      width: [ Number, 160 ],
-      height: [ Number, 120 ],
+    this.define<BaseFormatter.Props>(({Int}) => ({
+      width: [ Int, 160 ],
+      height: [ Int, 120 ],
     }))
   }
 
   draw_svg(smiles: string): string {
     smiles;
-    return '<svg width="1" height="1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1 1"></svg>'
+    return ""
   }
 
   override format(value: any, format: string, special_vars: {[key: string]: unknown}): string {

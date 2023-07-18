@@ -2,8 +2,8 @@ from bokehmol.formatters.rdkit_formatter import RDKitFormatter
 from bokehmol.tools.base_hover_tool import BaseHoverTool
 
 
-class MolHoverTool(BaseHoverTool, RDKitFormatter):
-    __implementation__ = "mol_hover_tool.ts"
+class RDKitHover(BaseHoverTool, RDKitFormatter):
+    __implementation__ = "rdkit_hover.ts"
 
 
 if __name__ == "__main__":
@@ -20,9 +20,7 @@ if __name__ == "__main__":
         tools="",
     )
 
-    plot.add_tools(
-        MolHoverTool(smiles_column="smi", width=300, options={"addAtomIndices": True})
-    )
+    plot.add_tools(RDKitHover(smiles_column="smi", add_atom_indices=True))
 
     plot.circle("x", "y", size=10, line_width=0, fill_color="red", source=source)
 
