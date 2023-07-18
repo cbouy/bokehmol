@@ -1,0 +1,82 @@
+[project]
+name = "bokehmol"
+description = "Tools for plotting molecules in Bokeh"
+authors = [
+  { name = "Cédric Bouysset", email = "cedric@bouysset.net" },
+]
+readme = "README.MD"
+requires-python = ">=3.8"
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+keywords = [
+    "science",
+    "chemistry",
+    "drug-design",
+    "cheminformatics",
+    "chemoinformatics",
+]
+dependencies = [
+    "bokeh>=3.0.0,<4",
+]
+
+[project.license]
+file = "LICENSE"
+
+[project.optional-dependencies]
+build = [
+    "build",
+]
+tests = [
+    "pytest>=6.1.2",
+    "pytest-cov",
+]
+dev = [
+    "bokehmol[build,tests]",
+]
+
+[project.urls]
+Homepage = "https://github.com/cbouy/bokehmol"
+Documentation = "https://bokehmol.readthedocs.io/en/stable/"
+Discussions = "https://github.com/cbouy/bokehmol/discussions"
+Issues = "https://github.com/cbouy/bokehmol/issues"
+Changelog = "https://github.com/cbouy/bokehmol/blob/master/CHANGELOG.md"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["bokehmol*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "bokehmol._version.__version__" }
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.report]
+include_namespace_packages = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "if .*TYPE_CHECKING:",
+    "@.*abstractmethod",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
