@@ -1,16 +1,19 @@
-from bokeh.core.properties import Int
-from bokeh.models import CustomJSHover
+from bokeh.core.properties import Any, Dict, String
 
 from bokehmol.backends.rdkit_backend import get_minimal_lib
+from bokehmol.formatters.base_formatter import BaseFormatter
 
 
-class RDKitFormatter(CustomJSHover):
+class RDKitFormatter(BaseFormatter):
     __implementation__ = "rdkit_formatter.ts"
     __javascript__ = get_minimal_lib()
 
-    width = Int(default=160, help="Image width")
-    height = Int(default=120, help="Image height")
-    # TODO add other options
+    options = Dict(
+        String,
+        Any,
+        default=lambda: dict(),
+        help="Options for the rendering (https://www.rdkitjs.com/#drawing-molecules-all-options).",
+    )
 
 
 if __name__ == "__main__":
@@ -38,7 +41,7 @@ if __name__ == "__main__":
     plot.add_tools(
         HoverTool(
             tooltips=hover_tooltip,
-            formatters={"@smi": RDKitFormatter()},
+            formatters={"@smi": RDKitFormatter(options={"addAtomIndices": True})},
         )
     )
 

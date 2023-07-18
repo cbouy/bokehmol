@@ -1,5 +1,5 @@
-import {CustomJSHover} from "models/tools/inspectors/customjs_hover"
 import * as p from "core/properties"
+import {BaseFormatter} from "./base_formatter"
 
 declare namespace rdkit {
   class RDKitModule {
@@ -10,33 +10,32 @@ declare namespace rdkit {
   class RDKitMolecule {
     is_valid(): boolean
     delete(): void
-    get_svg(width: number, height: number): string
+    get_svg_with_highlights(options: string): string
   }
 }
 
 export namespace RDKitFormatter {
   export type Attrs = p.AttrsOf<Props>
 
-  export type Props = CustomJSHover.Props & {
-    width: p.Property<number>
-    height: p.Property<number>
+  export type Props = BaseFormatter.Props & {
+    options: p.Property<{[key: string]: unknown}>
   }
 }
   
 export interface RDKitFormatter extends RDKitFormatter.Attrs {}
 
-export class RDKitFormatter extends CustomJSHover {
+export class RDKitFormatter extends BaseFormatter {
   declare properties: RDKitFormatter.Props
-  declare RDKitModule: rdkit.RDKitModule
+  protected RDKitModule: rdkit.RDKitModule
+  protected draw_opts?: string
 
   constructor(attrs?: Partial<RDKitFormatter.Attrs>) {
     super(attrs)
   }
 
   static {
-    this.define<RDKitFormatter.Props>(({Number}) => ({
-      width: [ Number, 160 ],
-      height: [ Number, 120 ],
+    this.define<RDKitFormatter.Props>(({Dict, Unknown}) => ({
+      options: [ Dict(Unknown), {} ],
     }))
   }
 
@@ -49,22 +48,22 @@ export class RDKitFormatter extends CustomJSHover {
     })
   }
 
-  draw_svg(smiles: string): string {
+  get rdkit_options(): string {
+    return JSON.stringify({
+      width: this.width,
+      height: this.height,
+      ...this.options,
+    })
+  }
+
+  override draw_svg(smiles: string): string {
+    const draw_opts = this.draw_opts ?? (this.draw_opts = this.rdkit_options)
     const mol = this.RDKitModule.get_mol(smiles)
-    let svg = ""
     if (mol.is_valid()) {
-        svg = mol.get_svg(this.width, this.height)
+        const svg = mol.get_svg_with_highlights(draw_opts)
+        mol.delete()
+        return svg
     }
-    mol.delete();
-    if (svg == "") {
-        svg = '<svg width="1" height="1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1 1"></svg>'
-    }
-    return svg
+    return super.draw_svg(smiles)
   }
-
-  override format(value: any, format: string, special_vars: {[key: string]: unknown}): string {
-    format; special_vars;
-    return this.draw_svg(value)
-  }
-
 }
