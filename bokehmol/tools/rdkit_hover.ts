@@ -1,8 +1,8 @@
 import * as p from "core/properties"
 import {RDKitFormatter} from "../formatters/rdkit_formatter"
-import {BaseHoverTool, BaseHoverToolView} from "./base_hover_tool"
+import {BaseHover, BaseHoverView} from "./base_hover"
 
-export class RDKitHoverView extends BaseHoverToolView {
+export class RDKitHoverView extends BaseHoverView {
   declare model: RDKitHover
 
   override initialize(): void {
@@ -58,15 +58,19 @@ export class RDKitHoverView extends BaseHoverToolView {
 export namespace RDKitHover {
   export type Attrs = p.AttrsOf<Props>
 
-  export type Props = BaseHoverTool.Props & RDKitFormatter.Props
+  export type Props = BaseHover.Props & RDKitFormatter.Props
 }
 
 // @ts-ignore
 export interface RDKitHover extends RDKitHover.Attrs {}
 
-export class RDKitHover extends BaseHoverTool {
+export class RDKitHover extends BaseHover {
   declare properties: RDKitHover.Props
   declare __view_type__: RDKitHoverView
+
+  override get computed_icon(): string {
+    return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC"
+  }
 
   constructor(attrs?: Partial<RDKitHover.Attrs>) {
     super(attrs)
@@ -113,9 +117,8 @@ export class RDKitHover extends BaseHoverTool {
       ],
     }))
 
-    // does not seem to work
-    this.register_alias("molhover", () => new RDKitHover())
+    this.register_alias("rdkit-hover", () => new RDKitHover())
   }
 
-  override tool_name = "Molecule Hover"
+  override tool_name = "RDKit Hover"
 }

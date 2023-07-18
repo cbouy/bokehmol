@@ -4,8 +4,8 @@ from bokeh.models import HoverTool
 from bokehmol.formatters.base_formatter import BaseFormatter
 
 
-class BaseHoverTool(HoverTool, BaseFormatter):
-    __implementation__ = "base_hover_tool.ts"
+class BaseHover(HoverTool, BaseFormatter):
+    __implementation__ = "base_hover.ts"
 
     smiles_column = String(default="SMILES", help="Column containing SMILES string")
     tooltips = Override(default=[])

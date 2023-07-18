@@ -4,11 +4,12 @@ import {replace_placeholders} from "core/util/templating"
 import {isString} from "core/util/types"
 import type {ColumnarDataSource} from "models/sources/columnar_data_source"
 import {HoverTool, HoverToolView, TooltipVars} from "models/tools/inspectors/hover_tool"
+import {tool_icon_hover} from "styles/icons.css"
 import {BaseFormatter} from "../formatters/base_formatter"
 
 
-export class BaseHoverToolView extends HoverToolView {
-  declare model: BaseHoverTool
+export class BaseHoverView extends HoverToolView {
+  declare model: BaseHover
 
   _render_tooltips(ds: ColumnarDataSource, vars: TooltipVars): HTMLElement | null {
     const {tooltips, smiles_column} = this.model
@@ -37,7 +38,7 @@ export class BaseHoverToolView extends HoverToolView {
   }
 }
 
-export namespace BaseHoverTool {
+export namespace BaseHover {
   export type Attrs = p.AttrsOf<Props>
 
   export type Props = HoverTool.Props & BaseFormatter.Props & {
@@ -46,28 +47,28 @@ export namespace BaseHoverTool {
 }
 
 // @ts-ignore
-export interface BaseHoverTool extends BaseHoverTool.Attrs {}
+export interface BaseHover extends BaseHover.Attrs {}
 
-export class BaseHoverTool extends HoverTool {
-  declare properties: BaseHoverTool.Props
-  declare __view_type__: BaseHoverToolView
+export class BaseHover extends HoverTool {
+  declare properties: BaseHover.Props
+  declare __view_type__: BaseHoverView
 
-  constructor(attrs?: Partial<BaseHoverTool.Attrs>) {
+  constructor(attrs?: Partial<BaseHover.Attrs>) {
     super(attrs)
   }
 
   static {
-    this.prototype.default_view = BaseHoverToolView
+    this.prototype.default_view = BaseHoverView
 
-    this.define<BaseHoverTool.Props>(({String, Number}) => ({
+    this.define<BaseHover.Props>(({String, Number}) => ({
       smiles_column: [ String, "SMILES" ],
       width: [ Number, 160 ],
       height: [ Number, 120 ],
     }))
-    this.override<BaseHoverTool.Props>({
+    this.override<BaseHover.Props>({
       tooltips: [],
     })
   }
 
-  override tool_icon = "bk-tool-icon-hover"
+  override tool_icon = tool_icon_hover
 }

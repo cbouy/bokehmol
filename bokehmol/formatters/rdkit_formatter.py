@@ -1,12 +1,12 @@
 from bokeh.core.properties import Bool, Float, Int, Tuple
 
-from bokehmol.backends.rdkit_backend import get_minimal_lib
+from bokehmol.config import settings
 from bokehmol.formatters.base_formatter import BaseFormatter
 
 
 class RDKitFormatter(BaseFormatter):
     __implementation__ = "rdkit_formatter.ts"
-    __javascript__ = get_minimal_lib()
+    __javascript__ = settings.rdkitjs_src
 
     add_atom_indices = Bool(default=False)
     add_bond_indices = Bool(default=False)
