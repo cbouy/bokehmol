@@ -1,7 +1,7 @@
 from bokeh.core.properties import Override, String
 from bokeh.models import HoverTool
 
-from bokehmol.formatters.base_formatter import BaseFormatter
+from bokehmol.models.base_formatter import BaseFormatter
 
 
 class BaseHover(HoverTool, BaseFormatter):

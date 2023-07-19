@@ -1,4 +1,4 @@
-import * as p from "core/properties"
+import * as p from "@bokehjs/core/properties"
 import {BaseFormatter} from "./base_formatter"
 
 declare namespace smilesdrawer {
@@ -24,6 +24,7 @@ export interface SmilesDrawerFormatter extends SmilesDrawerFormatter.Attrs {}
 export class SmilesDrawerFormatter extends BaseFormatter {
   declare properties: SmilesDrawerFormatter.Props
   protected SmiDrawer: smilesdrawer.SmiDrawer
+  protected drawer?: smilesdrawer.SmiDrawer
 
   constructor(attrs?: Partial<SmilesDrawerFormatter.Attrs>) {
     super(attrs)
@@ -54,10 +55,16 @@ export class SmilesDrawerFormatter extends BaseFormatter {
     return svg
   }
 
-  override draw_svg(smiles: string): string {
-    const target = this._make_svg_element()
+  _setup_drawer(): smilesdrawer.SmiDrawer {
     // @ts-ignore
     const sd = new this.SmiDrawer(this.mol_options, this.reaction_options)
+    this.drawer = sd
+    return sd
+  }
+
+  override draw_svg(smiles: string): string {
+    const sd = this.drawer ?? this._setup_drawer()
+    const target = this._make_svg_element()
     sd.draw(smiles, target, this.theme)
     const svg = target.outerHTML
     target.remove()

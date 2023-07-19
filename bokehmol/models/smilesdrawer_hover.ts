@@ -1,6 +1,6 @@
-import * as p from "core/properties"
-import {SmilesDrawerFormatter} from "../formatters/smilesdrawer_formatter"
+import * as p from "@bokehjs/core/properties"
 import {BaseHover, BaseHoverView} from "./base_hover"
+import {SmilesDrawerFormatter} from "./smilesdrawer_formatter"
 
 export class SmilesDrawerHoverView extends BaseHoverView {
   declare model: SmilesDrawerHover

@@ -1,4 +1,4 @@
-import * as p from "core/properties"
+import * as p from "@bokehjs/core/properties"
 import {BaseFormatter} from "./base_formatter"
 
 declare namespace rdkit {
@@ -58,7 +58,7 @@ export class RDKitFormatter extends BaseFormatter {
     })
   }
 
-  setup_options(): string {
+  _setup_options(): string {
     this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
     this.json_mol_opts = JSON.stringify({
       removeHs: this.remove_hs,
@@ -74,7 +74,7 @@ export class RDKitFormatter extends BaseFormatter {
   }
 
   override draw_svg(smiles: string): string {
-    const draw_opts = this.json_draw_opts ?? this.setup_options()
+    const draw_opts = this.json_draw_opts ?? this._setup_options()
     const mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
     if (mol !== null && mol.is_valid()) {
         const svg = mol.get_svg_with_highlights(draw_opts)

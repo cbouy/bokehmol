@@ -1,6 +1,6 @@
-import * as p from "core/properties"
-import {RDKitFormatter} from "../formatters/rdkit_formatter"
+import * as p from "@bokehjs/core/properties"
 import {BaseHover, BaseHoverView} from "./base_hover"
+import {RDKitFormatter} from "./rdkit_formatter"
 
 export class RDKitHoverView extends BaseHoverView {
   declare model: RDKitHover

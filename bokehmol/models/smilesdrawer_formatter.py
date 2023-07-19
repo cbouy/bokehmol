@@ -1,7 +1,7 @@
 from bokeh.core.properties import Any, Dict, String
 
 from bokehmol.config import settings
-from bokehmol.formatters.base_formatter import BaseFormatter
+from bokehmol.models.base_formatter import BaseFormatter
 
 
 class SmilesDrawerFormatter(BaseFormatter):
