@@ -53,6 +53,10 @@ export class BaseHover extends HoverTool {
   declare properties: BaseHover.Props
   declare __view_type__: BaseHoverView
 
+  override get computed_icon(): string {
+    return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAt1BMVEUAAAAAAAArKyskJCQcHBwrKyscHBwmJiYjIyMhISEgICAfHx8dHR0kJCQiIiIhISEhISEgICAkJCQkJCQjIyMiIiIiIiIhISEkJCQjIyMiIiIiIiIjIyMjIyMkJCQjIyMiIiIkJCQhISEjIyMiIiIiIiIiIiIkJCQjIyMiIiIiIiIiIiIiIiIhISEjIyMjIyMiIiIiIiIjIyMiIiIiIiIhISEiIiIiIiIiIiIiIiIhISEjIyP///9o30WSAAAAPHRSTlMAAQYHCQwSFBYXGBkaKy0uLzAxMjM0NTY5UVJTV1hdYHJyc3V3eHmBk5SVlpeZmpucnaqtrrCytLa7wMBTv07WAAAAAWJLR0Q8p2phzwAAAKRJREFUGBmtwQkagUAAgNF/ZAtZo2yRIrusofvfi+ab0gG8xx85gS8FDjlabJuS/db4WQ1RRksy+p3ZRZpxbZA6t8gYJxRzTc7WQhKPCjnlSJDwXEIdRQ9xPRKeS+eAcurjeiTEo8JhgNTdU44EUm9D9SlIRDV2FkrYZjHhazrHOJLS7xReRSi+CtzqZJYjmiUoNRn7/GixbUr2WyPHCXwpcPifD0UBD3u/QqniAAAAAElFTkSuQmCC"
+  }
+
   constructor(attrs?: Partial<BaseHover.Attrs>) {
     super(attrs)
   }
