@@ -30,6 +30,8 @@ export class SmilesDrawerFormatter extends BaseFormatter {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.smilesdrawer_formatter"
+
   static {
     this.define<SmilesDrawerFormatter.Props>(({String, Dict, Unknown}) => ({
       theme: [ String, "light" ],
