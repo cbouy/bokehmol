@@ -13,7 +13,9 @@ if __name__ == "__main__":
     from bokeh.models import ColumnDataSource
     from bokeh.plotting import figure, show
 
-    source = ColumnDataSource(data=dict(x=[1, 8], y=[2, 5], SMILES=["CCO", "c1ccccc1"]))
+    source = ColumnDataSource(
+        data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=["CCO", "c1ccccc1", "[n]"])
+    )
 
     plot = figure(
         x_range=(0, 10),

@@ -11,7 +11,7 @@ import {BaseFormatter} from "../formatters/base_formatter"
 export class BaseHoverView extends HoverToolView {
   declare model: BaseHover
 
-  _render_tooltips(ds: ColumnarDataSource, vars: TooltipVars): HTMLElement | null {
+  override _render_tooltips(ds: ColumnarDataSource, vars: TooltipVars): HTMLElement | null {
     const {tooltips, smiles_column} = this.model
     const i = vars.index
 
