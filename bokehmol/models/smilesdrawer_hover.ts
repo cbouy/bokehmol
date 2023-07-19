@@ -41,6 +41,8 @@ export class SmilesDrawerHover extends BaseHover {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.smilesdrawer_hover"
+
   static {
     this.prototype.default_view = SmilesDrawerHoverView
 

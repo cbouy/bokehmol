@@ -1,0 +1,31 @@
+{
+  "name": "bokehmol",
+  "version": "0.1.0.dev",
+  "description": "Handle molecules with bokeh",
+  "homepage": "https://github.com/cbouy/bokehmol",
+  "bugs": {
+    "url": "https://github.com/cbouy/bokehmol/issues"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Cedric Bouysset",
+    "email": "cedric@bouysset.net"
+  },
+  "keywords": [
+    "bokeh",
+    "cheminformatics",
+    "chemoinformatics",
+    "chemistry"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cbouy/bokehmol"
+  },
+  "files": [
+    "dist/**/*.{js,js.map,d.ts,json}"
+  ],
+  "dependencies": {
+    "@bokeh/bokehjs": "^3.1.1"
+  },
+  "devDependencies": {}
+}

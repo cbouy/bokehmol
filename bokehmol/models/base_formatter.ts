@@ -19,6 +19,8 @@ export class BaseFormatter extends CustomJSHover {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.base_formatter"
+
   static {
     this.define<BaseFormatter.Props>(({Int}) => ({
       width: [ Int, 160 ],

@@ -46,6 +46,8 @@ export class RDKitHover extends BaseHover {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.rdkit_hover"
+
   static {
     this.prototype.default_view = RDKitHoverView
 

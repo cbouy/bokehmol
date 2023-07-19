@@ -39,6 +39,8 @@ export class RDKitFormatter extends BaseFormatter {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.rdkit_formatter"
+
   static {
     this.define<RDKitFormatter.Props>(({Boolean, Dict, Unknown}) => ({
       prefer_coordgen: [ Boolean, true ],

@@ -61,6 +61,8 @@ export class BaseHover extends HoverTool {
     super(attrs)
   }
 
+  static __module__ = "bokehmol.models.base_hover"
+
   static {
     this.prototype.default_view = BaseHoverView
 
