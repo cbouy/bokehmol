@@ -42,6 +42,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
+        registry-url: 'https://registry.npmjs.org/'
         cache: "npm"
 
     - name: Install python with pip
@@ -54,6 +55,10 @@ jobs:
       run: |
         pip install setuptools wheel build virtualenv twine
     
+    - name: Install package
+      run: |
+        pip install .
+    
     - name: Check python installation
       run: |
         which python
@@ -64,6 +69,12 @@ jobs:
     - name: Build package
       run: |
         bash scripts/build.sh
+
+    - name: Publish the NPM package
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        PRE_RELEASE: ${{ env.IS_PRERELEASE }}
     
     - name: Publish the Python package
       env:
@@ -71,9 +82,3 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         TWINE_REPOSITORY: 'pypi'
       run: twine upload dist/bokehmol*.{tar.gz,whl}
-
-    - name: Publish the NPM package
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        PRE_RELEASE: ${{ env.IS_PRERELEASE }}
