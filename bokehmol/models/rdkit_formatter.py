@@ -5,7 +5,7 @@ from bokehmol.models.base_formatter import BaseFormatter
 
 
 class RDKitFormatter(BaseFormatter):
-    # __implementation__ = "rdkit_formatter.ts"
+    __implementation__ = "rdkit_formatter.ts"
     __javascript__ = settings.rdkitjs_src
 
     remove_hs = Bool(default=True)
