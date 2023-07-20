@@ -4,6 +4,3 @@ from bokehmol.models.smilesdrawer_formatter import SmilesDrawerFormatter
 
 class SmilesDrawerHover(BaseHover, SmilesDrawerFormatter):
     __implementation__ = "smilesdrawer_hover.ts"
-
-
-SmilesDrawerHover.register_alias("smiles_hover", lambda: SmilesDrawerHover())

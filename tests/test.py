@@ -1,7 +1,9 @@
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 
-from bokehmol import hover
+import bokehmol
+
+bokehmol.register_alias()
 
 source = ColumnDataSource(
     data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=["CCO", "c1ccccc1", "[n]"])

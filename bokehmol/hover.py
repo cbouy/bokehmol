@@ -1,9 +1,20 @@
 import typing as t
 
-from bokehmol.models.rdkit_hover import RDKitHover
-from bokehmol.models.smilesdrawer_hover import SmilesDrawerHover
-
 Tooltips = t.Optional[t.Union[str, t.List[t.Tuple[str, str]]]]
+
+
+def register_alias(rdkit_hover: bool = True, smiles_hover: bool = True) -> None:
+    """Register the alias for hover tools to be used directly in the `tools`
+    parameter of a figure, i.e. `rdkit_hover` and `smiles_hover`.
+    """
+    if rdkit_hover:
+        from bokehmol.models.rdkit_hover import RDKitHover
+
+        RDKitHover.register_alias("rdkit_hover", lambda: RDKitHover())
+    if smiles_hover:
+        from bokehmol.models.smilesdrawer_hover import SmilesDrawerHover
+
+        SmilesDrawerHover.register_alias("smiles_hover", lambda: SmilesDrawerHover())
 
 
 def rdkit(
@@ -17,7 +28,7 @@ def rdkit(
     prefer_coordgen: bool = True,
     draw_options: t.Optional[t.Dict[str, t.Any]] = None,
     **kwargs: t.Any,
-) -> RDKitHover:
+) -> "RDKitHover":
     """Hover tool that uses RDKit.js and the RDKit's Minimal Lib to depict
     SMILES strings on hover.
 
@@ -77,6 +88,8 @@ def rdkit(
         >>> plot.add_tools(hover_tool)
 
     """
+    from bokehmol.models.rdkit_hover import RDKitHover
+
     if tooltips is None:
         tooltips = []
     if draw_options is None:
@@ -117,7 +130,7 @@ def smiles_drawer(
     mol_options: t.Optional[t.Dict[str, t.Any]] = None,
     reaction_options: t.Optional[t.Dict[str, t.Any]] = None,
     **kwargs: t.Any,
-) -> SmilesDrawerHover:
+) -> "SmilesDrawerHover":
     """Hover tool that uses SmilesDrawer to depict SMILES strings on hover.
 
     Notes
@@ -178,6 +191,8 @@ def smiles_drawer(
         >>> plot.add_tools(hover_tool)
 
     """
+    from bokehmol.models.smilesdrawer_hover import SmilesDrawerHover
+
     if tooltips is None:
         tooltips = []
     if mol_options is None:
