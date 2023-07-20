@@ -58,11 +58,11 @@ def rdkit(
         RDKit's MolDrawOptions to control the style of the drawing:
         https://www.rdkitjs.com/#drawing-molecules-all-options.::
 
-        >>> bokehmol.hover.rdkit(
-        ...     draw_options={
-        ...         "addAtomIndices": True,
-        ...     }
-        ... )
+            >>> bokehmol.hover.rdkit(
+            ...     draw_options={
+            ...         "addAtomIndices": True,
+            ...     }
+            ... )
 
     **kwargs: t.Any
         Additional parameters passed to bokeh's Hover tool.
@@ -157,11 +157,11 @@ def smiles_drawer(
         SmilesDrawer options to control the style of the molecule's drawing:
         https://smilesdrawer.surge.sh/playground.html.::
 
-        >>> bokehmol.hover.smiles_drawer(
-        ...     mol_options={
-        ...         "atomVisualization": "balls",
-        ...     }
-        ... )
+            >>> bokehmol.hover.smiles_drawer(
+            ...     mol_options={
+            ...         "atomVisualization": "balls",
+            ...     }
+            ... )
 
     reaction_options: t.Dict[str, t.Any] = None
         Same as above for reaction's drawing.
