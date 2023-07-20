@@ -32,18 +32,6 @@ dependencies = [
 [project.license]
 file = "LICENSE"
 
-[project.optional-dependencies]
-build = [
-    "build",
-]
-tests = [
-    "pytest",
-    "pytest-cov",
-]
-dev = [
-    "bokehmol[build,tests]",
-]
-
 [project.urls]
 Homepage = "https://github.com/cbouy/bokehmol"
 Documentation = "https://bokehmol.readthedocs.io/en/stable/"
