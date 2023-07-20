@@ -1,4 +1,4 @@
-import * as p from "core/properties"
+import * as p from "@bokehjs/core/properties"
 import {BaseHover, BaseHoverView} from "./base_hover"
 import {SmilesDrawerFormatter} from "./smilesdrawer_formatter"
 

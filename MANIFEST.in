@@ -1,6 +1,4 @@
 global-include *.ts
-graft dist
-include *.json
-include .bokeh
-global-exclude *~ *.py[cod] *.so
+recursive-exclude dist/ *.d.ts
+global-exclude *.py[cod]
 global-exclude *.ipynb_checkpoints/*

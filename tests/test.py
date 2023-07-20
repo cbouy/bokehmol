@@ -12,7 +12,7 @@ plot = figure(
     y_range=(0, 10),
     title="Molecule Hover",
     background_fill_color="#efefef",
-    tools="rdkit-hover",
+    tools="rdkit_hover",
 )
 
 plot.circle("x", "y", size=10, line_width=0, fill_color="red", source=source)

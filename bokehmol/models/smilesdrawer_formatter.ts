@@ -1,4 +1,4 @@
-import * as p from "core/properties"
+import * as p from "@bokehjs/core/properties"
 import {BaseFormatter} from "./base_formatter"
 
 declare namespace smilesdrawer {

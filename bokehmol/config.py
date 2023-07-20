@@ -1,4 +1,6 @@
+import os
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass()
@@ -12,6 +14,9 @@ class Settings:
         "https://unpkg.com/smiles-drawer@{}/dist/smiles-drawer.min.js"
     )
     smilesdrawer_version: str = "2.0.1"
+
+    bokehmol_js: str = str(Path(__file__).parents[1] / "dist" / "bokehmol.min.js")
+    dev_mode: bool = bool(os.environ.get("BOKEHMOL", None))
 
     @property
     def rdkitjs_src(self) -> str:
