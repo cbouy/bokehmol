@@ -1,4 +1,4 @@
-import * as p from "@bokehjs/core/properties"
+import * as p from "core/properties"
 import {BaseHover, BaseHoverView} from "./base_hover"
 import {RDKitFormatter} from "./rdkit_formatter"
 
@@ -57,7 +57,7 @@ export class RDKitHover extends BaseHover {
       draw_options: [ Dict(Unknown), {} ],
     }))
 
-    this.register_alias("rdkit-hover", () => new RDKitHover())
+    this.register_alias("rdkit_hover", () => new RDKitHover())
   }
 
   override tool_name = "RDKit Hover"

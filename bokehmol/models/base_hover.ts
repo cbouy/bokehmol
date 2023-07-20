@@ -1,10 +1,10 @@
-import {div} from "@bokehjs/core/dom"
-import * as p from "@bokehjs/core/properties"
-import {replace_placeholders} from "@bokehjs/core/util/templating"
-import {isString} from "@bokehjs/core/util/types"
-import type {ColumnarDataSource} from "@bokehjs/models/sources/columnar_data_source"
-import {HoverTool, HoverToolView, TooltipVars} from "@bokehjs/models/tools/inspectors/hover_tool"
-import {tool_icon_hover} from "@bokehjs/styles/icons.css"
+import {div} from "core/dom"
+import * as p from "core/properties"
+import {replace_placeholders} from "core/util/templating"
+import {isString} from "core/util/types"
+import type {ColumnarDataSource} from "models/sources/columnar_data_source"
+import {HoverTool, HoverToolView, TooltipVars} from "models/tools/inspectors/hover_tool"
+import {tool_icon_hover} from "styles/icons.css"
 import {BaseFormatter} from "./base_formatter"
 
 

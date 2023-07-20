@@ -1,4 +1,4 @@
-import * as p from "@bokehjs/core/properties"
+import * as p from "core/properties"
 import {BaseHover, BaseHoverView} from "./base_hover"
 import {SmilesDrawerFormatter} from "./smilesdrawer_formatter"
 
@@ -51,7 +51,7 @@ export class SmilesDrawerHover extends BaseHover {
       reaction_options: [ Dict(Unknown), {} ],
     }))
 
-    this.register_alias("smiles-hover", () => new SmilesDrawerHover())
+    this.register_alias("smiles_hover", () => new SmilesDrawerHover())
   }
 
   override tool_name = "SmilesDrawer Hover"
