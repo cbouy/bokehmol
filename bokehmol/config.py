@@ -1,6 +1,7 @@
+import importlib.resources
 import os
+import warnings
 from dataclasses import dataclass
-from pathlib import Path
 
 
 @dataclass()
@@ -15,8 +16,20 @@ class Settings:
     )
     smilesdrawer_version: str = "2.0.1"
 
-    bokehmol_js: str = str(Path(__file__).parents[1] / "dist" / "bokehmol.min.js")
     dev_mode: bool = bool(os.environ.get("BOKEHMOL", None))
+
+    @property
+    def bokehmol_js(self) -> str:
+        try:
+            return importlib.resources.read_text("bokehmol", "bokehmol.min.js")
+        except Exception as exc:
+            if self.dev_mode:
+                warnings.warn(
+                    "Attempting to access pre-built bokehmol extension in development "
+                    "mode. This should not be necessary."
+                )
+                return ""
+            raise IOError("Could not load pre-built bokehmol extension") from exc
 
     @property
     def rdkitjs_src(self) -> str:
