@@ -37,7 +37,7 @@ build = [
     "build",
 ]
 tests = [
-    "pytest>=6.1.2",
+    "pytest",
     "pytest-cov",
 ]
 dev = [
@@ -52,8 +52,7 @@ Issues = "https://github.com/cbouy/bokehmol/issues"
 Changelog = "https://github.com/cbouy/bokehmol/blob/master/CHANGELOG.md"
 
 [tool.setuptools]
-zip-safe = false
-include-package-data = false
+include-package-data = true
 
 [tool.setuptools.packages.find]
 include = ["bokehmol*"]
