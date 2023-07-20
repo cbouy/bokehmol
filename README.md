@@ -4,7 +4,7 @@
 
 ## [TODO]
 
-- find out how to use the files built by `bokeh build`...
+- use bokehmol.min.js url if not dev mode
 
 **bokehmol** provides custom extensions that help plotting molecules with the
 [Bokeh](https://docs.bokeh.org/) library.
@@ -15,19 +15,10 @@ the browser so you don't even need to install rdkit in your Python environment.
 
 ## Installation
 
-`bokehmol` requires `NodeJS` to be installed beforehand. This can be done easily with
-conda or mamba:
+Bokehmol only requires bokeh as a dependency. You can install everything needed with:
 ```
-conda install nodejs
+pip install bokehmol
 ```
-
-Then you should be able to pip install the package:
-```
-pip install git+https://github.com/cbouy/bokehmol.git
-```
-
-Note that importing the package can be fairly slow as it currently needs to compile the custom
-Bokeh extensions to provide these functionalities.
 
 ## [Notebooks](https://github.com/cbouy/bokehmol/notebooks/)
 
