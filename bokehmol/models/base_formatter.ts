@@ -1,5 +1,5 @@
-import {CustomJSHover} from "models/tools/inspectors/customjs_hover"
-import * as p from "core/properties"
+import {CustomJSHover} from "@bokehjs/models/tools/inspectors/customjs_hover"
+import * as p from "@bokehjs/core/properties"
 
 export namespace BaseFormatter {
   export type Attrs = p.AttrsOf<Props>
