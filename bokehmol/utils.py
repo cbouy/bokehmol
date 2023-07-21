@@ -25,11 +25,8 @@ class Hook:
 
     def __init_subclass__(cls, **kwargs) -> None:
         if hasattr(cls, "__implementation__"):
-            if settings.dev_mode:
-                pass
-            else:
-                del cls.__implementation__
-                cls.__qualified_model__ = f"{cls.__module__}.{cls.__name__}"
+            del cls.__implementation__
+            cls.__qualified_model__ = f"{cls.__module__}.{cls.__name__}"
         super().__init_subclass__(**kwargs)
 
     @classmethod
@@ -39,9 +36,10 @@ class Hook:
         def patched_resolve(self, *args, **kwargs):
             kind = args[0] if args else kwargs["kind"]
             files, raw, hashes = cls._resolve(self, kind)
-            bokehmol_min_js = settings.bokehmol_js
-            if "{" in bokehmol_min_js:
-                raw.append(bokehmol_min_js)
+            if kind == "js":
+                bokehmol_min_js = settings.bokehmol_js
+                if "{" in bokehmol_min_js:
+                    raw.append(bokehmol_min_js)
             return files, raw, hashes
 
         Resources._resolve = patched_resolve

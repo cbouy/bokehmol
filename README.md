@@ -18,7 +18,7 @@ pip install bokehmol
 
 ## [Notebooks](https://github.com/cbouy/bokehmol/tree/master/notebooks)
 
-Some examples on how to use the library [![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.org/github/cbouy/bokehmol/blob/master/notebooks/quickstart.ipynb)
+Some examples on how to use the library [here](https://rawcdn.githack.com/cbouy/bokehmol/9ee061268dee125268489041586dac5e757fa6a3/notebooks/quickstart.html)
 
 ## [Discussions](https://github.com/cbouy/bokehmol/discussions)
 
