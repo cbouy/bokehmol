@@ -9,6 +9,9 @@ It currently provides hover tools that can depict molecules **on-the-fly** using
 pre-generate the depictions and store them in memory anymore! Everything is rendered client-side in
 the browser so you don't even need to install rdkit in your Python environment.
 
+<img width="600" alt="image" src="https://github.com/cbouy/bokehmol/assets/27850535/e33c4185-301a-477a-9a6b-fea2939ad540">
+
+
 ## [Installation](https://pypi.org/project/bokehmol/)
 
 Bokehmol only requires bokeh as a dependency. You can install it with:
