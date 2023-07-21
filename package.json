@@ -1,6 +1,6 @@
 {
   "name": "bokehmol",
-  "version": "0.1.0-a3",
+  "version": "0.1.0",
   "description": "Handle molecules with bokeh",
   "homepage": "https://github.com/cbouy/bokehmol",
   "bugs": {
