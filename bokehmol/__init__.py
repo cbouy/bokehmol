@@ -1,9 +1,9 @@
 from bokehmol import hover
 from bokehmol.config import settings
 from bokehmol.hover import register_alias
-from bokehmol.utils import Hook as _hook
+from bokehmol.utils import Hook, show
 
 if not settings.dev_mode:
-    _hook.enable()
+    Hook.enable()
 
-del _hook
+del Hook

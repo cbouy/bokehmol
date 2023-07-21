@@ -1,6 +1,12 @@
+import os
+from tempfile import NamedTemporaryFile
 from typing import ClassVar
 
+from bokeh.io import output_file
+from bokeh.models import Model
+from bokeh.plotting import save
 from bokeh.resources import Resources
+from IPython.display import HTML
 
 from bokehmol.config import settings
 
@@ -43,3 +49,36 @@ class Hook:
     @classmethod
     def restore(cls):
         Resources._resolve = cls._resolve
+
+
+def show(plot):
+    """For JupyterLab: alternative to `bokeh.plotting.show` that will temporarily save
+    the plot to a local tempfile, load the written content in memory, delete the file,
+    and display the content using an `IPython.display.HTML` object. Works on Windows
+    too...
+    """
+    try:
+        # save plot to tempfile, delete=False for Windows
+        with NamedTemporaryFile("w", suffix=".html", delete=False) as tf:
+            output_file(tf.name)
+            save(plot)
+
+        # load content and remove tempfile
+        with open(tf.name, "r") as fh:
+            data = fh.read()
+        os.remove(tf.name)
+
+        # avoid bokeh error `Models must be owned by only a single document` when
+        # displaying another plot
+        for model in plot.select({"type": Model}):
+            prev_doc = model.document
+            model._document = None
+            if prev_doc:
+                prev_doc.remove_root(model)
+
+        return HTML(data)
+    finally:
+        try:
+            os.remove(tf.name)
+        except Exception:
+            pass
