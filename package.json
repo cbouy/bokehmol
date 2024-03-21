@@ -1,6 +1,6 @@
 {
   "name": "bokehmol",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Handle molecules with bokeh",
   "homepage": "https://github.com/cbouy/bokehmol",
   "bugs": {
@@ -25,7 +25,6 @@
     "dist/**/*.map",
     "dist/**/*.js",
     "dist/**/*.d.ts"
-
   ],
   "main": "dist/bokehmol.min.js",
   "types": "dist/lib/index.d.ts",
