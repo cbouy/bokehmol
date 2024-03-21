@@ -6,7 +6,6 @@ from bokeh.io import output_file
 from bokeh.models import Model
 from bokeh.plotting import save
 from bokeh.resources import Resources
-from IPython.display import HTML
 
 from bokehmol.config import settings
 
@@ -55,6 +54,8 @@ def show(plot):
     and display the content using an `IPython.display.HTML` object. Works on Windows
     too...
     """
+    from IPython.display import HTML
+
     try:
         # save plot to tempfile, delete=False for Windows
         with NamedTemporaryFile("w", suffix=".html", delete=False) as tf:
