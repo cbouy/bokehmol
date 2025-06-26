@@ -1,5 +1,6 @@
 import * as p from "@bokehjs/core/properties"
 import {BaseFormatter} from "./base_formatter"
+import {combineSvgs} from "./combinesvg"
 
 declare namespace smilesdrawer {
   class SmiDrawer {
@@ -66,6 +67,17 @@ export class SmilesDrawerFormatter extends BaseFormatter {
 
   override draw_svg(smiles: string): string {
     const sd = this.drawer ?? this._setup_drawer()
+
+    if (Array.isArray(smiles)){
+      let images: any[] = []
+      for(var index in smiles){
+          const target = this._make_svg_element()
+          sd.draw(smiles[index], target, this.theme)
+          const svg = target.outerHTML
+          images.push(svg)
+        }
+      return combineSvgs(images, this.width, this.height, 5, this.background_colour)
+    }
     const target = this._make_svg_element()
     sd.draw(smiles, target, this.theme)
     const svg = target.outerHTML

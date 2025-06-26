@@ -1,5 +1,6 @@
 import * as p from "@bokehjs/core/properties"
 import {BaseFormatter} from "./base_formatter"
+import {combineSvgs} from "./combinesvg"
 
 declare namespace rdkit {
   class RDKitModule {
@@ -75,8 +76,23 @@ export class RDKitFormatter extends BaseFormatter {
     return this.json_draw_opts
   }
 
-  override draw_svg(smiles: string): string {
+  override draw_svg(smiles: string | string[]): string {
     const draw_opts = this.json_draw_opts ?? this._setup_options()
+    
+    if (Array.isArray(smiles)){
+      let images: any[] = []
+      for(var index in smiles){
+        const mol = this.RDKitModule.get_mol(smiles[index], this.json_mol_opts)
+        if (mol == null || !mol.is_valid()) {
+          continue
+        }
+        const svg = mol.get_svg_with_highlights(draw_opts)
+        images.push(svg)
+        mol.delete()
+      }
+    return combineSvgs(images, this.width, this.height, 5)        
+  }
+    
     const mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
     if (mol !== null && mol.is_valid()) {
         const svg = mol.get_svg_with_highlights(draw_opts)

@@ -58,6 +58,6 @@ if __name__ == "__main__":
         )
     )
 
-    plot.circle("x", "y", size=10, line_width=0, fill_color="red", source=source)
+    plot.scatter("x", "y", size=10, line_width=0, fill_color="red", source=source)
 
     show(plot)
