@@ -6,15 +6,8 @@ export function combineSvgs(images: any[], width: number, height: number, maxMol
       
       combinedSvg += `<g id="molecule-${i}" transform="translate(${col*width},${row*height})">${images[i]}</g>`;
     }
-    let filler = images.length
-    while(filler%maxMolsRow != 0){
-      filler++
-      let row = Math.floor(filler/maxMolsRow)
-      let col = filler % maxMolsRow;
-      combinedSvg += `<g id="filler_mol" transform="translate(${col*width},${row*height})"></g>`;
-    }
 
-    return '<svg width="' + width * maxMolsRow + '" height="' + (Math.ceil(images.length / maxMolsRow) * height) + '" style="background-color:' + backgroundColor + '">' +
+    return '<svg width="' + width * Math.min(maxMolsRow, images.length) + '" height="' + (Math.ceil(images.length / maxMolsRow) * height) + '" style="background-color:' + backgroundColor + '">' +
               '<g>' +
                   combinedSvg +
               '</g>' +
