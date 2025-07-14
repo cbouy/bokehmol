@@ -24,8 +24,8 @@ export interface SmilesDrawerFormatter extends SmilesDrawerFormatter.Attrs {}
 
 export class SmilesDrawerFormatter extends BaseFormatter {
   declare properties: SmilesDrawerFormatter.Props
-  protected SmiDrawer: smilesdrawer.SmiDrawer
-  protected drawer?: smilesdrawer.SmiDrawer
+  protected SmiDrawer: typeof smilesdrawer.SmiDrawer
+  protected drawer: smilesdrawer.SmiDrawer
 
   constructor(attrs?: Partial<SmilesDrawerFormatter.Attrs>) {
     super(attrs)
@@ -44,33 +44,45 @@ export class SmilesDrawerFormatter extends BaseFormatter {
 
   override initialize(): void {
     super.initialize()
-    // @ts-ignore
-    this.SmiDrawer = SmiDrawer
+    this.onSmiDrawerReady(true, false, () => {
+      // @ts-expect-error
+      this.SmiDrawer = SmiDrawer
+    })
   }
 
-  _make_svg_element(): SVGElement {
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-    svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
-    svg.setAttributeNS(null, "width", "" + this.width)
-    svg.setAttributeNS(null, "height", "" + this.height)
-    svg.style.backgroundColor = this.background_colour
-    return svg
+  onSmiDrawerReady(init: boolean, lib: boolean, callback: () => void): void {
+    this.hasLoadedSmiDrawer(init, lib) ? callback() : setTimeout(() => {
+      this.onSmiDrawerReady(init, lib, callback)
+    }, 100)
   }
 
-  _setup_drawer(): smilesdrawer.SmiDrawer {
-    // @ts-ignore
-    const sd = new this.SmiDrawer(this.mol_options, this.reaction_options)
-    this.drawer = sd
-    return sd
+  hasLoadedSmiDrawer(init: boolean, lib: boolean): boolean {
+    // @ts-expect-error
+    return (init ? typeof SmiDrawer !== "undefined" : true)
+        && (lib ? typeof this.SmiDrawer !== "undefined" : true)
+  }
+
+  override makeSVGElement(): SVGElement {
+    const el = super.makeSVGElement()
+    el.style.backgroundColor = this.background_colour
+    return el
+  }
+
+  setupDrawer(): smilesdrawer.SmiDrawer {
+    this.onSmiDrawerReady(true, true, () => {
+      this.drawer = new this.SmiDrawer(this.mol_options, this.reaction_options)
+    })
+    return this.drawer
   }
 
   override draw_svg(smiles: string): string {
-    const sd = this.drawer ?? this._setup_drawer()
-    const target = this._make_svg_element()
-    sd.draw(smiles, target, this.theme)
-    const svg = target.outerHTML
-    target.remove()
+    const el = this.makeSVGElement()
+    this.onSmiDrawerReady(true, true, () => {
+      const sd = this.drawer ?? this.setupDrawer()
+      sd.draw(smiles, el, this.theme)
+    })
+    const svg = el.outerHTML
+    el.remove()
     return svg
   }
 }

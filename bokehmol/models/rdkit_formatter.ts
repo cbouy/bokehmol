@@ -1,6 +1,6 @@
 import type * as p from "@bokehjs/core/properties"
 import type {Dict} from "@bokehjs/core/types"
-import type {RDKitModule} from "@rdkit/rdkit"
+import type {RDKitModule, JSMol} from "@rdkit/rdkit"
 import {BaseFormatter} from "./base_formatter"
 
 
@@ -42,23 +42,31 @@ export class RDKitFormatter extends BaseFormatter {
 
   override initialize(): void {
     super.initialize()
-    // @ts-expect-error
-    initRDKitModule().then((RDKitModule: RDKitModule) => {
-      this.RDKitModule = RDKitModule
-      console.log("RDKit version: " + RDKitModule.version())
+    this.onRDKitReady(true, false, () => {
+      // @ts-expect-error
+      initRDKitModule().then((RDKitModule: RDKitModule) => {
+        this.RDKitModule = RDKitModule
+        console.log("RDKit version: " + RDKitModule.version())
+      })
     })
   }
 
-  _wait_rdkit_module(): void {
-    // blocks until the rdkit module is available
-     if (typeof this.RDKitModule === "undefined"){
-          setTimeout(this._wait_rdkit_module, 100)
-      }
+  onRDKitReady(init: boolean, lib: boolean, callback: () => void): void {
+    this.hasLoadedRDKit(init, lib) ? callback() : setTimeout(() => {
+      this.onRDKitReady(init, lib, callback)
+    }, 100)
   }
 
-  _setup_options(): string {
-    this._wait_rdkit_module()
-    this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
+  hasLoadedRDKit(init: boolean, lib: boolean): boolean {
+    // @ts-expect-error
+    return (init ? typeof initRDKitModule !== "undefined" : true)
+        && (lib ? typeof this.RDKitModule !== "undefined" : true)
+  }
+
+  setupRDKitOptions(): string {
+    this.onRDKitReady(true, true, () => {
+      this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
+    })
     this.json_mol_opts = JSON.stringify({
       removeHs: this.remove_hs,
       sanitize: this.sanitize,
@@ -73,12 +81,18 @@ export class RDKitFormatter extends BaseFormatter {
   }
 
   override draw_svg(smiles: string): string {
-    const draw_opts = this.json_draw_opts ?? this._setup_options()
-    const mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
-    if (mol !== null && mol.is_valid()) {
-        const svg = mol.get_svg_with_highlights(draw_opts)
-        mol.delete()
-        return svg
+    const draw_opts = this.json_draw_opts ?? this.setupRDKitOptions()
+    var mol: JSMol | null
+    this.onRDKitReady(true, true, () => {
+      mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
+    })
+    // @ts-expect-error
+    if (typeof mol === "undefined") {
+      console.log("Attempting to display structures before RDKit has been loaded.")
+    } else if (mol !== null && mol.is_valid()) {
+      const svg = mol.get_svg_with_highlights(draw_opts)
+      mol.delete()
+      return svg
     }
     return super.draw_svg(smiles)
   }

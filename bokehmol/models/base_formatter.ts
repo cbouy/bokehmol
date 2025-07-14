@@ -28,9 +28,21 @@ export class BaseFormatter extends CustomJSHover {
     }))
   }
 
+  makeSVGElement(): SVGElement {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+    svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
+    svg.setAttributeNS(null, "width", "" + this.width)
+    svg.setAttributeNS(null, "height", "" + this.height)
+    return svg
+  }
+
+  // @ts-expect-error
   draw_svg(smiles: string): string {
-    smiles;
-    return ""
+    const el = this.makeSVGElement()
+    const svg = el.outerHTML
+    el.remove()
+    return svg
   }
 
   override format(value: any, format: string, special_vars: {[key: string]: unknown}): string {
