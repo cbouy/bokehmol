@@ -34,13 +34,12 @@
     ],
     "baseUrl": ".",
     "outDir": "./dist/lib",
+    "rootDirs": [".", "./dist/dts/"],
     "paths": {
       "@bokehjs/*": [
         "./node_modules/@bokeh/bokehjs/build/js/lib/*"
       ]
     }
   },
-  "include": [
-    "./**/*.ts"
-  ]
+  "include": ["./*.ts", "./models/", "./dist/dts/"]
 }

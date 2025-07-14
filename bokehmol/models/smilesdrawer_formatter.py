@@ -5,7 +5,6 @@ from bokehmol.models.base_formatter import BaseFormatter
 
 
 class SmilesDrawerFormatter(BaseFormatter):
-    __implementation__ = "smilesdrawer_formatter.ts"
     __javascript__ = settings.smilesdrawer_src
 
     theme = String(

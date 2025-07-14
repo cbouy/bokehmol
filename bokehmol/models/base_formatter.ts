@@ -1,5 +1,5 @@
 import {CustomJSHover} from "@bokehjs/models/tools/inspectors/customjs_hover"
-import * as p from "@bokehjs/core/properties"
+import type * as p from "@bokehjs/core/properties"
 
 export namespace BaseFormatter {
   export type Attrs = p.AttrsOf<Props>
@@ -19,7 +19,7 @@ export class BaseFormatter extends CustomJSHover {
     super(attrs)
   }
 
-  static __module__ = "bokehmol.models.base_formatter"
+  static override __module__ = "bokehmol.models.base_formatter"
 
   static {
     this.define<BaseFormatter.Props>(({Int}) => ({

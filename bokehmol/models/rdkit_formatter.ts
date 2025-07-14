@@ -1,19 +1,8 @@
-import * as p from "@bokehjs/core/properties"
+import type * as p from "@bokehjs/core/properties"
+import type {Dict} from "@bokehjs/core/types"
+import type {RDKitModule} from "@rdkit/rdkit"
 import {BaseFormatter} from "./base_formatter"
 
-declare namespace rdkit {
-  class RDKitModule {
-    prefer_coordgen(prefer: boolean): void
-    get_mol(source: string, mol_opts?: string): RDKitMolecule | null
-    version(): string
-  }
-
-  class RDKitMolecule {
-    is_valid(): boolean
-    delete(): void
-    get_svg_with_highlights(options: string): string
-  }
-}
 
 export namespace RDKitFormatter {
   export type Attrs = p.AttrsOf<Props>
@@ -23,7 +12,7 @@ export namespace RDKitFormatter {
     remove_hs: p.Property<boolean>
     sanitize: p.Property<boolean>
     kekulize: p.Property<boolean>
-    draw_options: p.Property<{[key: string]: unknown}>
+    draw_options: p.Property<Dict<unknown>>
   }
 }
   
@@ -31,7 +20,7 @@ export interface RDKitFormatter extends RDKitFormatter.Attrs {}
 
 export class RDKitFormatter extends BaseFormatter {
   declare properties: RDKitFormatter.Props
-  protected RDKitModule: rdkit.RDKitModule
+  protected RDKitModule: RDKitModule
   protected json_draw_opts?: string
   protected json_mol_opts?: string
 
@@ -39,28 +28,36 @@ export class RDKitFormatter extends BaseFormatter {
     super(attrs)
   }
 
-  static __module__ = "bokehmol.models.rdkit_formatter"
+  static override __module__ = "bokehmol.models.rdkit_formatter"
 
   static {
-    this.define<RDKitFormatter.Props>(({Boolean, Dict, Unknown}) => ({
-      prefer_coordgen: [ Boolean, true ],
-      remove_hs: [ Boolean, true ],
-      sanitize: [ Boolean, true ],
-      kekulize: [ Boolean, true ],
+    this.define<RDKitFormatter.Props>(({Bool, Dict, Unknown}) => ({
+      prefer_coordgen: [ Bool, true ],
+      remove_hs: [ Bool, true ],
+      sanitize: [ Bool, true ],
+      kekulize: [ Bool, true ],
       draw_options: [ Dict(Unknown), {} ],
     }))
   }
 
   override initialize(): void {
     super.initialize()
-    // @ts-ignore
-    initRDKitModule().then((RDKitModule: rdkit.RDKitModule) => {
+    // @ts-expect-error
+    initRDKitModule().then((RDKitModule: RDKitModule) => {
       this.RDKitModule = RDKitModule
       console.log("RDKit version: " + RDKitModule.version())
     })
   }
 
+  _wait_rdkit_module(): void {
+    // blocks until the rdkit module is available
+     if (typeof this.RDKitModule === "undefined"){
+          setTimeout(this._wait_rdkit_module, 100)
+      }
+  }
+
   _setup_options(): string {
+    this._wait_rdkit_module()
     this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
     this.json_mol_opts = JSON.stringify({
       removeHs: this.remove_hs,

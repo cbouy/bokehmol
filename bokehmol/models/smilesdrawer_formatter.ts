@@ -1,4 +1,5 @@
-import * as p from "@bokehjs/core/properties"
+import type * as p from "@bokehjs/core/properties"
+import type {Dict} from "@bokehjs/core/types"
 import {BaseFormatter} from "./base_formatter"
 
 declare namespace smilesdrawer {
@@ -14,8 +15,8 @@ export namespace SmilesDrawerFormatter {
   export type Props = BaseFormatter.Props & {    
     theme: p.Property<string>
     background_colour: p.Property<string>
-    mol_options: p.Property<{[key: string]: unknown}>
-    reaction_options: p.Property<{[key: string]: unknown}>
+    mol_options: p.Property<Dict<unknown>>
+    reaction_options: p.Property<Dict<unknown>>
   }
 }
   
@@ -30,12 +31,12 @@ export class SmilesDrawerFormatter extends BaseFormatter {
     super(attrs)
   }
 
-  static __module__ = "bokehmol.models.smilesdrawer_formatter"
+  static override __module__ = "bokehmol.models.smilesdrawer_formatter"
 
   static {
-    this.define<SmilesDrawerFormatter.Props>(({String, Dict, Unknown}) => ({
-      theme: [ String, "light" ],
-      background_colour: [ String, "transparent" ],
+    this.define<SmilesDrawerFormatter.Props>(({Str, Dict, Unknown}) => ({
+      theme: [ Str, "light" ],
+      background_colour: [ Str, "transparent" ],
       mol_options: [ Dict(Unknown), {} ],
       reaction_options: [ Dict(Unknown), {} ],
     }))
