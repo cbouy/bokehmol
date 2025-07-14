@@ -21,7 +21,7 @@ pip install bokehmol
 
 ## [Notebooks](https://github.com/cbouy/bokehmol/tree/master/notebooks)
 
-Some examples on how to use the library [here](https://rawcdn.githack.com/cbouy/bokehmol/9ee061268dee125268489041586dac5e757fa6a3/notebooks/quickstart.html)
+Some examples on how to use the library [here](https://raw.githack.com/cbouy/bokehmol/master/notebooks/quickstart.html)
 
 ## [Discussions](https://github.com/cbouy/bokehmol/discussions)
 
