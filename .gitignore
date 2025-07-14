@@ -1,6 +1,5 @@
 **/*.html
 !notebooks/*.html
-bokehmol/bokehmol.min.js
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,node,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,node,visualstudiocode

@@ -1,19 +1,8 @@
-import * as p from "@bokehjs/core/properties"
+import type * as p from "@bokehjs/core/properties"
+import type {Dict} from "@bokehjs/core/types"
+import type {RDKitModule, JSMol} from "@rdkit/rdkit"
 import {BaseFormatter} from "./base_formatter"
 
-declare namespace rdkit {
-  class RDKitModule {
-    prefer_coordgen(prefer: boolean): void
-    get_mol(source: string, mol_opts?: string): RDKitMolecule | null
-    version(): string
-  }
-
-  class RDKitMolecule {
-    is_valid(): boolean
-    delete(): void
-    get_svg_with_highlights(options: string): string
-  }
-}
 
 export namespace RDKitFormatter {
   export type Attrs = p.AttrsOf<Props>
@@ -23,7 +12,7 @@ export namespace RDKitFormatter {
     remove_hs: p.Property<boolean>
     sanitize: p.Property<boolean>
     kekulize: p.Property<boolean>
-    draw_options: p.Property<{[key: string]: unknown}>
+    draw_options: p.Property<Dict<unknown>>
   }
 }
   
@@ -31,7 +20,7 @@ export interface RDKitFormatter extends RDKitFormatter.Attrs {}
 
 export class RDKitFormatter extends BaseFormatter {
   declare properties: RDKitFormatter.Props
-  protected RDKitModule: rdkit.RDKitModule
+  protected RDKitModule: RDKitModule
   protected json_draw_opts?: string
   protected json_mol_opts?: string
 
@@ -39,29 +28,45 @@ export class RDKitFormatter extends BaseFormatter {
     super(attrs)
   }
 
-  static __module__ = "bokehmol.models.rdkit_formatter"
+  static override __module__ = "bokehmol.models.rdkit_formatter"
 
   static {
-    this.define<RDKitFormatter.Props>(({Boolean, Dict, Unknown}) => ({
-      prefer_coordgen: [ Boolean, true ],
-      remove_hs: [ Boolean, true ],
-      sanitize: [ Boolean, true ],
-      kekulize: [ Boolean, true ],
+    this.define<RDKitFormatter.Props>(({Bool, Dict, Unknown}) => ({
+      prefer_coordgen: [ Bool, true ],
+      remove_hs: [ Bool, true ],
+      sanitize: [ Bool, true ],
+      kekulize: [ Bool, true ],
       draw_options: [ Dict(Unknown), {} ],
     }))
   }
 
   override initialize(): void {
     super.initialize()
-    // @ts-ignore
-    initRDKitModule().then((RDKitModule: rdkit.RDKitModule) => {
-      this.RDKitModule = RDKitModule
-      console.log("RDKit version: " + RDKitModule.version())
+    this.onRDKitReady(true, false, () => {
+      // @ts-expect-error
+      initRDKitModule().then((RDKitModule: RDKitModule) => {
+        this.RDKitModule = RDKitModule
+        console.log("RDKit version: " + RDKitModule.version())
+      })
     })
   }
 
-  _setup_options(): string {
-    this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
+  onRDKitReady(init: boolean, lib: boolean, callback: () => void): void {
+    this.hasLoadedRDKit(init, lib) ? callback() : setTimeout(() => {
+      this.onRDKitReady(init, lib, callback)
+    }, 100)
+  }
+
+  hasLoadedRDKit(init: boolean, lib: boolean): boolean {
+    // @ts-expect-error
+    return (init ? typeof initRDKitModule !== "undefined" : true)
+        && (lib ? typeof this.RDKitModule !== "undefined" : true)
+  }
+
+  setupRDKitOptions(): string {
+    this.onRDKitReady(true, true, () => {
+      this.RDKitModule.prefer_coordgen(this.prefer_coordgen)
+    })
     this.json_mol_opts = JSON.stringify({
       removeHs: this.remove_hs,
       sanitize: this.sanitize,
@@ -76,12 +81,18 @@ export class RDKitFormatter extends BaseFormatter {
   }
 
   override draw_svg(smiles: string): string {
-    const draw_opts = this.json_draw_opts ?? this._setup_options()
-    const mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
-    if (mol !== null && mol.is_valid()) {
-        const svg = mol.get_svg_with_highlights(draw_opts)
-        mol.delete()
-        return svg
+    const draw_opts = this.json_draw_opts ?? this.setupRDKitOptions()
+    var mol: JSMol | null
+    this.onRDKitReady(true, true, () => {
+      mol = this.RDKitModule.get_mol(smiles, this.json_mol_opts)
+    })
+    // @ts-expect-error
+    if (typeof mol === "undefined") {
+      console.log("Attempting to display structures before RDKit has been loaded.")
+    } else if (mol !== null && mol.is_valid()) {
+      const svg = mol.get_svg_with_highlights(draw_opts)
+      mol.delete()
+      return svg
     }
     return super.draw_svg(smiles)
   }
