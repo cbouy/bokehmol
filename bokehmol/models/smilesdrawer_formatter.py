@@ -5,7 +5,6 @@ from bokehmol.models.base_formatter import BaseFormatter
 
 
 class SmilesDrawerFormatter(BaseFormatter):
-    __implementation__ = "smilesdrawer_formatter.ts"
     __javascript__ = settings.smilesdrawer_src
 
     theme = String(
@@ -26,7 +25,7 @@ if __name__ == "__main__":
     from bokeh.plotting import figure, show
 
     source = ColumnDataSource(
-        data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=["CCO", "c1ccccc1", "[n]"])
+        data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=[["CCO", "CC"], "c1ccccc1", "[n]"])
     )
 
     plot = figure(

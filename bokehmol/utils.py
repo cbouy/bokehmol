@@ -1,4 +1,9 @@
+import json
 import os
+import warnings
+from functools import lru_cache
+from importlib.metadata import Distribution
+from importlib.resources import files as pkg_files
 from tempfile import NamedTemporaryFile
 from typing import ClassVar
 
@@ -10,42 +15,47 @@ from bokeh.resources import Resources
 from bokehmol.config import settings
 
 
-class Hook:
-    """Class inherited by all models for multiple purposes:
+@lru_cache(maxsize=1)
+def is_editable_install() -> bool:
+    is_editable = False
+    direct_url = Distribution.from_name("bokehmol").read_text("direct_url.json")
+    if direct_url:
+        is_editable = json.loads(direct_url).get("dir_info", {}).get("editable", False)
+    return is_editable
 
-    - avoid having to delete the `__implementation__` attribute outside of
-      prototyping
-    - register the models with the correct name on the JS side
-    - also includes a classmethod that patches the bokeh class that handles
-      including the JS dependencies in the final document.
+
+class PatchedResources:
+    """Patches the bokeh class that handles including the JS dependencies in the final
+    document.
     """
 
-    _resolve: ClassVar = None
-
-    def __init_subclass__(cls, **kwargs) -> None:
-        if hasattr(cls, "__implementation__"):
-            del cls.__implementation__
-            cls.__qualified_model__ = f"{cls.__module__}.{cls.__name__}"
-        super().__init_subclass__(**kwargs)
+    _raw_resolve: ClassVar = Resources._resolve
 
     @classmethod
     def enable(cls):
-        cls._resolve = Resources._resolve
-
-        def patched_resolve(self, *args, **kwargs):
+        def patched(self, *args, **kwargs):
             kind = args[0] if args else kwargs["kind"]
-            files, raw, hashes = cls._resolve(self, kind)
+            files, raw, hashes = cls._raw_resolve(self, kind)
             if kind == "js":
-                bokehmol_min_js = settings.bokehmol_js
-                if "{" in bokehmol_min_js:
+                if is_editable_install() and settings.use_packaged_js:
+                    warnings.warn(
+                        "Editable install detected, patching bokeh resources to "
+                        "include local compiled bokehmol as raw JS file. Remember to "
+                        "rerun `pip install -e .` after any JS-side modification."
+                    )
+                    bokehmol_min_js = (
+                        pkg_files("bokehmol")
+                        .joinpath("dist/bokehmol.min.js")
+                        .read_text()
+                    )
                     raw.append(bokehmol_min_js)
             return files, raw, hashes
 
-        Resources._resolve = patched_resolve
+        Resources._resolve = patched
 
     @classmethod
     def restore(cls):
-        Resources._resolve = cls._resolve
+        Resources._resolve = cls._raw_resolve
 
 
 def show(plot):
