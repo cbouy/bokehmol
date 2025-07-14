@@ -38,15 +38,6 @@ Discussions = "https://github.com/cbouy/bokehmol/discussions"
 Issues = "https://github.com/cbouy/bokehmol/issues"
 Changelog = "https://github.com/cbouy/bokehmol/blob/master/CHANGELOG.md"
 
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.packages.find]
-include = ["bokehmol*"]
-
-[tool.setuptools.dynamic]
-version = { attr = "bokehmol._version.__version__" }
-
 [tool.black]
 line-length = 88
 
