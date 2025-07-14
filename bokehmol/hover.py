@@ -22,6 +22,7 @@ def rdkit(
     tooltips: Tooltips = None,
     width: int = 160,
     height: int = 120,
+    mols_per_row: int = 3,
     remove_hs: bool = True,
     sanitize: bool = True,
     kekulize: bool = True,
@@ -57,6 +58,8 @@ def rdkit(
         Image width in pixels
     height: int = 120
         Image height in pixels
+    mols_per_row: int = 3
+        Number of molecules to display per row if a list of SMILES is used.
     remove_hs: bool = True
         Remove hydrogens from the depiction
     sanitize: bool = True
@@ -99,6 +102,7 @@ def rdkit(
         tooltips=tooltips,
         width=width,
         height=height,
+        mols_per_row=mols_per_row,
         remove_hs=remove_hs,
         sanitize=sanitize,
         kekulize=kekulize,
@@ -113,6 +117,7 @@ def smiles_drawer(
     tooltips: Tooltips = None,
     width: int = 160,
     height: int = 120,
+    mols_per_row: int = 3,
     theme: t.Literal[
         "light",
         "dark",
@@ -160,6 +165,8 @@ def smiles_drawer(
         Image width in pixels
     height: int = 120
         Image height in pixels
+    mols_per_row: int = 3
+        Number of molecules to display per row if a list of SMILES is used.
     theme: str = "light"
         Theme used for the rendering. One of the following list: light, dark,
         oldschool, solarized, solarized-dark, matrix, github, carbon, cyberpunk,
@@ -204,6 +211,7 @@ def smiles_drawer(
         tooltips=tooltips,
         width=width,
         height=height,
+        mols_per_row=mols_per_row,
         theme=theme,
         background_colour=background_colour,
         mol_options=mol_options,

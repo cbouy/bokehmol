@@ -7534,8 +7534,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Note-on-Jupyter-notebooks-and-JupyterLab:">Note on Jupyter notebooks and JupyterLab:<a class="anchor-link" href="#Note-on-Jupyter-notebooks-and-JupyterLab:">¶</a></h3><p>Sometimes the JavaScript dependencies (RDKit or SmilesDrawer) aren't being injected/loaded properly in the notebook when using <code>bokeh.plotting.show</code>.</p>
-<p>We provide <code>bokehmol.show</code> instead to fix this issue in notebooks.</p>
+<p>Let's start with some dummy data. You can provide input as a simple SMILES string,
+a SMILES string containing multiple fragments, or a list of SMILES to display as a grid.</p>
 </div>
 </div>
 </div>
@@ -7553,9 +7553,9 @@ a.anchor-link {
         <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
         <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
         <span class="n">SMILES</span><span class="o">=</span><span class="p">[</span>
-            <span class="s2">"O=C1CCCN1C"</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">"O=C1CCCN1C"</span><span class="p">,</span> <span class="s2">"O=C1CC(C)CN1C"</span><span class="p">],</span>
             <span class="s2">"c1ccccc1.c1ccccc1O"</span><span class="p">,</span>
-            <span class="s2">"CN1C(=O)N(C)c2ncn(C)c2C1(=O)"</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">"CN1C(=O)N(C)c2ncn(C)c2C1(=O)"</span><span class="p">,</span> <span class="s2">"O=C1CCCN1C.O=C1CC(C)CN1C"</span><span class="p">],</span>
             <span class="s2">"C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1"</span><span class="p">,</span>
             <span class="s2">"CC(=O)OC1=CC=CC=C1C(=O)O"</span><span class="p">,</span>
         <span class="p">]</span>
@@ -7630,6 +7630,14 @@ a.anchor-link {
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>/var/home/cedric/dev/bokehmol/bokehmol/utils.py:41: UserWarning: Editable install detected, patching bokeh resources to include local compiled bokehmol as raw JS file. Remember to rerun `pip install -e .` after any JS-side modification.
+  warnings.warn(
+</pre>
+</div>
+</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
@@ -7653,13 +7661,70 @@ a.anchor-link {
 <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.7.3.min.js" type="text/javascript"></script>
 <script src="https://unpkg.com/bokehmol@0.1.2-a3/dist/bokehmol.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+        'use strict';
+/*!
+ * Copyright (c) Anaconda, Inc., and Bokeh Contributors
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * Neither the name of Anaconda nor the names of any contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+(function(root, factory) {
+  factory(root["Bokeh"], undefined);
+})(this, function(Bokeh, version) {
+  let define;
+  return (function(modules, entry, aliases, externals) {
+    const bokeh = typeof Bokeh !== "undefined" ? (version != null ? Bokeh[version] : Bokeh) : null;
+    if (bokeh != null) {
+      return bokeh.register_plugin(modules, entry, aliases);
+    } else {
+      throw new Error("Cannot find Bokeh" + (version != null ? " " + version : "") + ". You have to load it prior to loading plugins.");
+    }
+  })
+({
+"c27055c896": function _(e,o,b,s,t){s();const i=e("tslib").__importStar(e("2fbbcedd89"));b.bokehmol=i;(0,e("@bokehjs/base").register_models)(i)},
+"2fbbcedd89": function _(e,r,a,t,o){t(),o("BaseFormatter",e("bdbba644e6").BaseFormatter),o("BaseHover",e("b3aabca0fa").BaseHover),o("RDKitFormatter",e("66b72b8836").RDKitFormatter),o("RDKitHover",e("db381e1cc8").RDKitHover),o("SmilesDrawerFormatter",e("be6f45e05e").SmilesDrawerFormatter),o("SmilesDrawerHover",e("6c967671db").SmilesDrawerHover)},
+"bdbba644e6": function _(t,e,r,s,o){var i;s();const h=t("@bokehjs/models/tools/inspectors/customjs_hover"),n=t("01840ae548");class m extends h.CustomJSHover{constructor(t){super(t)}makeSVGElement(){const t=document.createElementNS("http://www.w3.org/2000/svg","svg");return t.setAttribute("xmlns","http://www.w3.org/2000/svg"),t.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink"),t.setAttributeNS(null,"width",""+this.width),t.setAttributeNS(null,"height",""+this.height),t}draw_grid(t){const e=[];return t.forEach((t=>{let r=this.draw_svg(t);e.push(r)})),(0,n.combineSVGs)(e,this.width,this.height,this.mols_per_row)}draw_svg(t){const e=this.makeSVGElement(),r=e.outerHTML;return e.remove(),r}format(t,e,r){return Array.isArray(t)?this.draw_grid(t):this.draw_svg(t)}}r.BaseFormatter=m,i=m,m.__name__="BaseFormatter",m.__module__="bokehmol.models.base_formatter",i.define((({Int:t})=>({width:[t,160],height:[t,120],mols_per_row:[t,5]})))},
+"01840ae548": function _(e,t,a,l,i){l(),a.combineSVGs=function(e,t,a,l){let i=[],n=t,s=a;const h=new DOMParser;for(let g=0;g<e.length;g++){let r=e[g],o=t,m=a;if(t<0||a<0){let e=h.parseFromString(r,"image/svg+xml").firstChild;t<0&&(o=e.width.baseVal.value,o>n?n=o:o=n),a<0&&(m=e.height.baseVal.value),m>s?s=m:m=s}let f=o*(g%l),c=m*Math.floor(g/l),u=btoa(r);i.push(`<image id="molecule-${g}" transform="translate(${f},${c})" href='data:image/svg+xml;base64,${u}'></image>`)}const g=n*Math.min(l,e.length),r=s*Math.ceil(e.length/l);return`<svg width="${g}" height="${r}">${i.join("\n")}</svg>`}},
+"b3aabca0fa": function _(e,i,o,I,t){var s;I();const A=e("@bokehjs/core/dom"),r=e("@bokehjs/core/util/templating"),l=e("@bokehjs/core/util/types"),h=e("@bokehjs/models/tools/inspectors/hover_tool"),_=e("@bokehjs/styles/icons.css");class n extends h.HoverToolView{_render_tooltips(e,i){const{tooltips:o,smiles_column:I}=this.model,t=i.index;let s=o;if(null===s&&(s=""),!(0,l.isString)(s)){const o=this._template_el??(this._template_el=this._create_template(s));s=this._render_template(o,s,e,i).outerHTML}const h="<div>@"+I+"{custom}</div>"+s,_=(0,r.replace_placeholders)({html:h},e,t,this.model.formatters,i);return(0,A.div)(_)}}o.BaseHoverView=n,n.__name__="BaseHoverView";class a extends h.HoverTool{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAt1BMVEUAAAAAAAArKyskJCQcHBwrKyscHBwmJiYjIyMhISEgICAfHx8dHR0kJCQiIiIhISEhISEgICAkJCQkJCQjIyMiIiIiIiIhISEkJCQjIyMiIiIiIiIjIyMjIyMkJCQjIyMiIiIkJCQhISEjIyMiIiIiIiIiIiIkJCQjIyMiIiIiIiIiIiIiIiIhISEjIyMjIyMiIiIiIiIjIyMiIiIiIiIhISEiIiIiIiIiIiIiIiIhISEjIyP///9o30WSAAAAPHRSTlMAAQYHCQwSFBYXGBkaKy0uLzAxMjM0NTY5UVJTV1hdYHJyc3V3eHmBk5SVlpeZmpucnaqtrrCytLa7wMBTv07WAAAAAWJLR0Q8p2phzwAAAKRJREFUGBmtwQkagUAAgNF/ZAtZo2yRIrusofvfi+ab0gG8xx85gS8FDjlabJuS/db4WQ1RRksy+p3ZRZpxbZA6t8gYJxRzTc7WQhKPCjnlSJDwXEIdRQ9xPRKeS+eAcurjeiTEo8JhgNTdU44EUm9D9SlIRDV2FkrYZjHhazrHOJLS7xReRSi+CtzqZJYjmiUoNRn7/GixbUr2WyPHCXwpcPifD0UBD3u/QqniAAAAAElFTkSuQmCC"}constructor(e){super(e),this.tool_icon=_.tool_icon_hover}}o.BaseHover=a,s=a,a.__name__="BaseHover",a.__module__="bokehmol.models.base_hover",s.prototype.default_view=n,s.define((({Str:e,Int:i})=>({smiles_column:[e,"SMILES"],width:[i,160],height:[i,120],mols_per_row:[i,3]}))),s.override({tooltips:[]})},
+"66b72b8836": function _(t,i,e,s,o){var n;s();const r=t("bdbba644e6");class d extends r.BaseFormatter{constructor(t){super(t)}initialize(){super.initialize(),this.onRDKitReady(!0,!1,(()=>{initRDKitModule().then((t=>{this.RDKitModule=t,console.log("RDKit version: "+t.version())}))}))}onRDKitReady(t,i,e){this.hasLoadedRDKit(t,i)?e():setTimeout((()=>{this.onRDKitReady(t,i,e)}),100)}hasLoadedRDKit(t,i){return!(t&&"undefined"==typeof initRDKitModule||i&&void 0===this.RDKitModule)}setupRDKitOptions(){return this.onRDKitReady(!0,!0,(()=>{this.RDKitModule.prefer_coordgen(this.prefer_coordgen)})),this.json_mol_opts=JSON.stringify({removeHs:this.remove_hs,sanitize:this.sanitize,kekulize:this.kekulize}),this.json_draw_opts=JSON.stringify({width:this.width,height:this.height,...this.draw_options}),this.json_draw_opts}draw_svg(t){const i=this.json_draw_opts??this.setupRDKitOptions();var e;if(this.onRDKitReady(!0,!0,(()=>{e=this.RDKitModule.get_mol(t,this.json_mol_opts)})),void 0===e)console.log("Attempting to display structures before RDKit has been loaded.");else if(null!==e&&e.is_valid()){const t=e.get_svg_with_highlights(i);return e.delete(),t}return super.draw_svg(t)}}e.RDKitFormatter=d,n=d,d.__name__="RDKitFormatter",d.__module__="bokehmol.models.rdkit_formatter",n.define((({Bool:t,Dict:i,Unknown:e})=>({prefer_coordgen:[t,!0],remove_hs:[t,!0],sanitize:[t,!0],kekulize:[t,!0],draw_options:[i(e),{}]})))},
+"db381e1cc8": function _(A,e,o,i,t){var r;i();const s=A("b3aabca0fa"),n=A("66b72b8836");class _ extends s.BaseHoverView{initialize(){super.initialize();const{formatters:A,smiles_column:e,width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d}=this.model;A["@"+e]=new n.RDKitFormatter({width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d})}}o.RDKitHoverView=_,_.__name__="RDKitHoverView";class a extends s.BaseHover{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC"}constructor(A){super(A),this.tool_name="RDKit Hover"}}o.RDKitHover=a,r=a,a.__name__="RDKitHover",a.__module__="bokehmol.models.rdkit_hover",r.prototype.default_view=_,r.define((({Bool:A,Dict:e,Unknown:o})=>({prefer_coordgen:[A,!0],remove_hs:[A,!0],sanitize:[A,!0],kekulize:[A,!0],draw_options:[e(o),{}]}))),r.register_alias("rdkit_hover",(()=>new r))},
+"be6f45e05e": function _(e,r,t,i,a){var o;i();const s=e("bdbba644e6");class n extends s.BaseFormatter{constructor(e){super(e)}initialize(){super.initialize(),this.onSmiDrawerReady(!0,!1,(()=>{this.SmiDrawer=SmiDrawer}))}onSmiDrawerReady(e,r,t){this.hasLoadedSmiDrawer(e,r)?t():setTimeout((()=>{this.onSmiDrawerReady(e,r,t)}),100)}hasLoadedSmiDrawer(e,r){return!(e&&"undefined"==typeof SmiDrawer||r&&void 0===this.SmiDrawer)}makeSVGElement(){const e=super.makeSVGElement();return e.style.backgroundColor=this.background_colour,e}setupDrawer(){return this.onSmiDrawerReady(!0,!0,(()=>{this.drawer=new this.SmiDrawer(this.mol_options,this.reaction_options)})),this.drawer}draw_svg(e){const r=this.makeSVGElement();this.onSmiDrawerReady(!0,!0,(()=>{(this.drawer??this.setupDrawer()).draw(e,r,this.theme)}));const t=r.outerHTML;return r.remove(),t}}t.SmilesDrawerFormatter=n,o=n,n.__name__="SmilesDrawerFormatter",n.__module__="bokehmol.models.smilesdrawer_formatter",o.define((({Str:e,Dict:r,Unknown:t})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[r(t),{}],reaction_options:[r(t),{}]})))},
+"6c967671db": function _(e,o,r,i,t){var s;i();const a=e("b3aabca0fa"),n=e("be6f45e05e");class _ extends a.BaseHoverView{initialize(){super.initialize();const{formatters:e,smiles_column:o,width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l}=this.model;e["@"+o]=new n.SmilesDrawerFormatter({width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l})}}r.SmilesDrawerHoverView=_,_.__name__="SmilesDrawerHoverView";class l extends a.BaseHover{constructor(e){super(e),this.tool_name="SmilesDrawer Hover"}}r.SmilesDrawerHover=l,s=l,l.__name__="SmilesDrawerHover",l.__module__="bokehmol.models.smilesdrawer_hover",s.prototype.default_view=_,s.define((({Str:e,Dict:o,Unknown:r})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[o(r),{}],reaction_options:[o(r),{}]}))),s.register_alias("smiles_hover",(()=>new s))},
+}, "c27055c896", {"index":"c27055c896","models/index":"2fbbcedd89","models/base_formatter":"bdbba644e6","models/combinesvg":"01840ae548","models/base_hover":"b3aabca0fa","models/rdkit_formatter":"66b72b8836","models/rdkit_hover":"db381e1cc8","models/smilesdrawer_formatter":"be6f45e05e","models/smilesdrawer_hover":"6c967671db"}, {});});
+
+    </script>
+<script type="text/javascript">
         Bokeh.set_log_level("info");
     </script>
 </head>
 <body>
-<div data-root-id="p1006" id="c34d6de9-e2e2-45cf-9d45-06174ea2f925" style="display: contents;"></div>
-<script id="ad6c1d26-64d7-427f-a696-3e9ac759e39f" type="application/json">
-      {"d5c95b7f-0218-43ae-b6e1-84cc9137c2c8":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1006","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1007"},"y_range":{"type":"object","name":"DataRange1d","id":"p1008"},"x_scale":{"type":"object","name":"LinearScale","id":"p1016"},"y_scale":{"type":"object","name":"LinearScale","id":"p1017"},"title":{"type":"object","name":"Title","id":"p1009","attributes":{"text":"Basic RDKit Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1037","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",["O=C1CCCN1C","c1ccccc1.c1ccccc1O","CN1C(=O)N(C)c2ncn(C)c2C1(=O)","C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1038","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1039"}}},"glyph":{"type":"object","name":"Scatter","id":"p1034","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1035","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1036","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1015","attributes":{"tools":[{"type":"object","name":"bokehmol.models.rdkit_hover.RDKitHover","id":"p1028","attributes":{"renderers":"auto"}},{"type":"object","name":"PanTool","id":"p1029"},{"type":"object","name":"WheelZoomTool","id":"p1030","attributes":{"renderers":"auto"}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1023","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1024","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1025"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1026"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1018","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1019","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1020"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1021"}}}],"center":[{"type":"object","name":"Grid","id":"p1022","attributes":{"axis":{"id":"p1018"}}},{"type":"object","name":"Grid","id":"p1027","attributes":{"dimension":1,"axis":{"id":"p1023"}}}],"background_fill_color":"#efefef"}}]}}
+<div data-root-id="p1006" id="d0920c04-f6e8-46f9-933c-ce1043dc88d3" style="display: contents;"></div>
+<script id="ba80c827-3ac3-47b1-a3a7-de70c97204c7" type="application/json">
+      {"78bb3f70-9cc9-4cd7-b2f2-51db68b6c5ef":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1006","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1007"},"y_range":{"type":"object","name":"DataRange1d","id":"p1008"},"x_scale":{"type":"object","name":"LinearScale","id":"p1016"},"y_scale":{"type":"object","name":"LinearScale","id":"p1017"},"title":{"type":"object","name":"Title","id":"p1009","attributes":{"text":"Basic RDKit Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1037","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",[["O=C1CCCN1C","O=C1CC(C)CN1C"],"c1ccccc1.c1ccccc1O",["CN1C(=O)N(C)c2ncn(C)c2C1(=O)","O=C1CCCN1C.O=C1CC(C)CN1C"],"C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1038","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1039"}}},"glyph":{"type":"object","name":"Scatter","id":"p1034","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1035","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1036","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1015","attributes":{"tools":[{"type":"object","name":"bokehmol.models.rdkit_hover.RDKitHover","id":"p1028","attributes":{"renderers":"auto"}},{"type":"object","name":"PanTool","id":"p1029"},{"type":"object","name":"WheelZoomTool","id":"p1030","attributes":{"renderers":"auto"}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1023","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1024","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1025"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1026"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1018","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1019","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1020"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1021"}}}],"center":[{"type":"object","name":"Grid","id":"p1022","attributes":{"axis":{"id":"p1018"}}},{"type":"object","name":"Grid","id":"p1027","attributes":{"dimension":1,"axis":{"id":"p1023"}}}],"background_fill_color":"#efefef"}}]}}
     </script>
 <script type="text/javascript">
       (function() {
@@ -7667,8 +7732,8 @@ a.anchor-link {
           Bokeh.safely(function() {
             (function(root) {
               function embed_document(root) {
-              const docs_json = document.getElementById('ad6c1d26-64d7-427f-a696-3e9ac759e39f').textContent;
-              const render_items = [{"docid":"d5c95b7f-0218-43ae-b6e1-84cc9137c2c8","roots":{"p1006":"c34d6de9-e2e2-45cf-9d45-06174ea2f925"},"root_ids":["p1006"]}];
+              const docs_json = document.getElementById('ba80c827-3ac3-47b1-a3a7-de70c97204c7').textContent;
+              const render_items = [{"docid":"78bb3f70-9cc9-4cd7-b2f2-51db68b6c5ef","roots":{"p1006":"d0920c04-f6e8-46f9-933c-ce1043dc88d3"},"root_ids":["p1006"]}];
               root.Bokeh.embed.embed_items(docs_json, render_items);
               }
               if (root.Bokeh !== undefined) {
@@ -7698,6 +7763,18 @@ a.anchor-link {
 </body>
 </html>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Note-on-Jupyter-notebooks-and-JupyterLab:">Note on Jupyter notebooks and JupyterLab:<a class="anchor-link" href="#Note-on-Jupyter-notebooks-and-JupyterLab:">¶</a></h3><p>Sometimes the JavaScript dependencies (RDKit or SmilesDrawer) aren't being injected/loaded properly in the notebook when using <code>bokeh.plotting.show</code>.</p>
+<p>We provide <code>bokehmol.show</code> instead to fix this issue in notebooks.</p>
 </div>
 </div>
 </div>
@@ -7751,13 +7828,70 @@ a.anchor-link {
 <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.7.3.min.js" type="text/javascript"></script>
 <script src="https://unpkg.com/bokehmol@0.1.2-a3/dist/bokehmol.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+        'use strict';
+/*!
+ * Copyright (c) Anaconda, Inc., and Bokeh Contributors
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * Neither the name of Anaconda nor the names of any contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+(function(root, factory) {
+  factory(root["Bokeh"], undefined);
+})(this, function(Bokeh, version) {
+  let define;
+  return (function(modules, entry, aliases, externals) {
+    const bokeh = typeof Bokeh !== "undefined" ? (version != null ? Bokeh[version] : Bokeh) : null;
+    if (bokeh != null) {
+      return bokeh.register_plugin(modules, entry, aliases);
+    } else {
+      throw new Error("Cannot find Bokeh" + (version != null ? " " + version : "") + ". You have to load it prior to loading plugins.");
+    }
+  })
+({
+"c27055c896": function _(e,o,b,s,t){s();const i=e("tslib").__importStar(e("2fbbcedd89"));b.bokehmol=i;(0,e("@bokehjs/base").register_models)(i)},
+"2fbbcedd89": function _(e,r,a,t,o){t(),o("BaseFormatter",e("bdbba644e6").BaseFormatter),o("BaseHover",e("b3aabca0fa").BaseHover),o("RDKitFormatter",e("66b72b8836").RDKitFormatter),o("RDKitHover",e("db381e1cc8").RDKitHover),o("SmilesDrawerFormatter",e("be6f45e05e").SmilesDrawerFormatter),o("SmilesDrawerHover",e("6c967671db").SmilesDrawerHover)},
+"bdbba644e6": function _(t,e,r,s,o){var i;s();const h=t("@bokehjs/models/tools/inspectors/customjs_hover"),n=t("01840ae548");class m extends h.CustomJSHover{constructor(t){super(t)}makeSVGElement(){const t=document.createElementNS("http://www.w3.org/2000/svg","svg");return t.setAttribute("xmlns","http://www.w3.org/2000/svg"),t.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink"),t.setAttributeNS(null,"width",""+this.width),t.setAttributeNS(null,"height",""+this.height),t}draw_grid(t){const e=[];return t.forEach((t=>{let r=this.draw_svg(t);e.push(r)})),(0,n.combineSVGs)(e,this.width,this.height,this.mols_per_row)}draw_svg(t){const e=this.makeSVGElement(),r=e.outerHTML;return e.remove(),r}format(t,e,r){return Array.isArray(t)?this.draw_grid(t):this.draw_svg(t)}}r.BaseFormatter=m,i=m,m.__name__="BaseFormatter",m.__module__="bokehmol.models.base_formatter",i.define((({Int:t})=>({width:[t,160],height:[t,120],mols_per_row:[t,5]})))},
+"01840ae548": function _(e,t,a,l,i){l(),a.combineSVGs=function(e,t,a,l){let i=[],n=t,s=a;const h=new DOMParser;for(let g=0;g<e.length;g++){let r=e[g],o=t,m=a;if(t<0||a<0){let e=h.parseFromString(r,"image/svg+xml").firstChild;t<0&&(o=e.width.baseVal.value,o>n?n=o:o=n),a<0&&(m=e.height.baseVal.value),m>s?s=m:m=s}let f=o*(g%l),c=m*Math.floor(g/l),u=btoa(r);i.push(`<image id="molecule-${g}" transform="translate(${f},${c})" href='data:image/svg+xml;base64,${u}'></image>`)}const g=n*Math.min(l,e.length),r=s*Math.ceil(e.length/l);return`<svg width="${g}" height="${r}">${i.join("\n")}</svg>`}},
+"b3aabca0fa": function _(e,i,o,I,t){var s;I();const A=e("@bokehjs/core/dom"),r=e("@bokehjs/core/util/templating"),l=e("@bokehjs/core/util/types"),h=e("@bokehjs/models/tools/inspectors/hover_tool"),_=e("@bokehjs/styles/icons.css");class n extends h.HoverToolView{_render_tooltips(e,i){const{tooltips:o,smiles_column:I}=this.model,t=i.index;let s=o;if(null===s&&(s=""),!(0,l.isString)(s)){const o=this._template_el??(this._template_el=this._create_template(s));s=this._render_template(o,s,e,i).outerHTML}const h="<div>@"+I+"{custom}</div>"+s,_=(0,r.replace_placeholders)({html:h},e,t,this.model.formatters,i);return(0,A.div)(_)}}o.BaseHoverView=n,n.__name__="BaseHoverView";class a extends h.HoverTool{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAt1BMVEUAAAAAAAArKyskJCQcHBwrKyscHBwmJiYjIyMhISEgICAfHx8dHR0kJCQiIiIhISEhISEgICAkJCQkJCQjIyMiIiIiIiIhISEkJCQjIyMiIiIiIiIjIyMjIyMkJCQjIyMiIiIkJCQhISEjIyMiIiIiIiIiIiIkJCQjIyMiIiIiIiIiIiIiIiIhISEjIyMjIyMiIiIiIiIjIyMiIiIiIiIhISEiIiIiIiIiIiIiIiIhISEjIyP///9o30WSAAAAPHRSTlMAAQYHCQwSFBYXGBkaKy0uLzAxMjM0NTY5UVJTV1hdYHJyc3V3eHmBk5SVlpeZmpucnaqtrrCytLa7wMBTv07WAAAAAWJLR0Q8p2phzwAAAKRJREFUGBmtwQkagUAAgNF/ZAtZo2yRIrusofvfi+ab0gG8xx85gS8FDjlabJuS/db4WQ1RRksy+p3ZRZpxbZA6t8gYJxRzTc7WQhKPCjnlSJDwXEIdRQ9xPRKeS+eAcurjeiTEo8JhgNTdU44EUm9D9SlIRDV2FkrYZjHhazrHOJLS7xReRSi+CtzqZJYjmiUoNRn7/GixbUr2WyPHCXwpcPifD0UBD3u/QqniAAAAAElFTkSuQmCC"}constructor(e){super(e),this.tool_icon=_.tool_icon_hover}}o.BaseHover=a,s=a,a.__name__="BaseHover",a.__module__="bokehmol.models.base_hover",s.prototype.default_view=n,s.define((({Str:e,Int:i})=>({smiles_column:[e,"SMILES"],width:[i,160],height:[i,120],mols_per_row:[i,3]}))),s.override({tooltips:[]})},
+"66b72b8836": function _(t,i,e,s,o){var n;s();const r=t("bdbba644e6");class d extends r.BaseFormatter{constructor(t){super(t)}initialize(){super.initialize(),this.onRDKitReady(!0,!1,(()=>{initRDKitModule().then((t=>{this.RDKitModule=t,console.log("RDKit version: "+t.version())}))}))}onRDKitReady(t,i,e){this.hasLoadedRDKit(t,i)?e():setTimeout((()=>{this.onRDKitReady(t,i,e)}),100)}hasLoadedRDKit(t,i){return!(t&&"undefined"==typeof initRDKitModule||i&&void 0===this.RDKitModule)}setupRDKitOptions(){return this.onRDKitReady(!0,!0,(()=>{this.RDKitModule.prefer_coordgen(this.prefer_coordgen)})),this.json_mol_opts=JSON.stringify({removeHs:this.remove_hs,sanitize:this.sanitize,kekulize:this.kekulize}),this.json_draw_opts=JSON.stringify({width:this.width,height:this.height,...this.draw_options}),this.json_draw_opts}draw_svg(t){const i=this.json_draw_opts??this.setupRDKitOptions();var e;if(this.onRDKitReady(!0,!0,(()=>{e=this.RDKitModule.get_mol(t,this.json_mol_opts)})),void 0===e)console.log("Attempting to display structures before RDKit has been loaded.");else if(null!==e&&e.is_valid()){const t=e.get_svg_with_highlights(i);return e.delete(),t}return super.draw_svg(t)}}e.RDKitFormatter=d,n=d,d.__name__="RDKitFormatter",d.__module__="bokehmol.models.rdkit_formatter",n.define((({Bool:t,Dict:i,Unknown:e})=>({prefer_coordgen:[t,!0],remove_hs:[t,!0],sanitize:[t,!0],kekulize:[t,!0],draw_options:[i(e),{}]})))},
+"db381e1cc8": function _(A,e,o,i,t){var r;i();const s=A("b3aabca0fa"),n=A("66b72b8836");class _ extends s.BaseHoverView{initialize(){super.initialize();const{formatters:A,smiles_column:e,width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d}=this.model;A["@"+e]=new n.RDKitFormatter({width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d})}}o.RDKitHoverView=_,_.__name__="RDKitHoverView";class a extends s.BaseHover{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC"}constructor(A){super(A),this.tool_name="RDKit Hover"}}o.RDKitHover=a,r=a,a.__name__="RDKitHover",a.__module__="bokehmol.models.rdkit_hover",r.prototype.default_view=_,r.define((({Bool:A,Dict:e,Unknown:o})=>({prefer_coordgen:[A,!0],remove_hs:[A,!0],sanitize:[A,!0],kekulize:[A,!0],draw_options:[e(o),{}]}))),r.register_alias("rdkit_hover",(()=>new r))},
+"be6f45e05e": function _(e,r,t,i,a){var o;i();const s=e("bdbba644e6");class n extends s.BaseFormatter{constructor(e){super(e)}initialize(){super.initialize(),this.onSmiDrawerReady(!0,!1,(()=>{this.SmiDrawer=SmiDrawer}))}onSmiDrawerReady(e,r,t){this.hasLoadedSmiDrawer(e,r)?t():setTimeout((()=>{this.onSmiDrawerReady(e,r,t)}),100)}hasLoadedSmiDrawer(e,r){return!(e&&"undefined"==typeof SmiDrawer||r&&void 0===this.SmiDrawer)}makeSVGElement(){const e=super.makeSVGElement();return e.style.backgroundColor=this.background_colour,e}setupDrawer(){return this.onSmiDrawerReady(!0,!0,(()=>{this.drawer=new this.SmiDrawer(this.mol_options,this.reaction_options)})),this.drawer}draw_svg(e){const r=this.makeSVGElement();this.onSmiDrawerReady(!0,!0,(()=>{(this.drawer??this.setupDrawer()).draw(e,r,this.theme)}));const t=r.outerHTML;return r.remove(),t}}t.SmilesDrawerFormatter=n,o=n,n.__name__="SmilesDrawerFormatter",n.__module__="bokehmol.models.smilesdrawer_formatter",o.define((({Str:e,Dict:r,Unknown:t})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[r(t),{}],reaction_options:[r(t),{}]})))},
+"6c967671db": function _(e,o,r,i,t){var s;i();const a=e("b3aabca0fa"),n=e("be6f45e05e");class _ extends a.BaseHoverView{initialize(){super.initialize();const{formatters:e,smiles_column:o,width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l}=this.model;e["@"+o]=new n.SmilesDrawerFormatter({width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l})}}r.SmilesDrawerHoverView=_,_.__name__="SmilesDrawerHoverView";class l extends a.BaseHover{constructor(e){super(e),this.tool_name="SmilesDrawer Hover"}}r.SmilesDrawerHover=l,s=l,l.__name__="SmilesDrawerHover",l.__module__="bokehmol.models.smilesdrawer_hover",s.prototype.default_view=_,s.define((({Str:e,Dict:o,Unknown:r})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[o(r),{}],reaction_options:[o(r),{}]}))),s.register_alias("smiles_hover",(()=>new s))},
+}, "c27055c896", {"index":"c27055c896","models/index":"2fbbcedd89","models/base_formatter":"bdbba644e6","models/combinesvg":"01840ae548","models/base_hover":"b3aabca0fa","models/rdkit_formatter":"66b72b8836","models/rdkit_hover":"db381e1cc8","models/smilesdrawer_formatter":"be6f45e05e","models/smilesdrawer_hover":"6c967671db"}, {});});
+
+    </script>
+<script type="text/javascript">
         Bokeh.set_log_level("info");
     </script>
 </head>
 <body>
-<div data-root-id="p1040" id="b4d4d4b3-7299-49c6-889b-eeb52b977bf1" style="display: contents;"></div>
-<script id="e47c99fa-586c-46fb-b73c-9068b31ec0dc" type="application/json">
-      {"850fb83d-65ab-4c01-aa0e-b6dc09294b1a":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1040","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1041"},"y_range":{"type":"object","name":"DataRange1d","id":"p1042"},"x_scale":{"type":"object","name":"LinearScale","id":"p1050"},"y_scale":{"type":"object","name":"LinearScale","id":"p1051"},"title":{"type":"object","name":"Title","id":"p1043","attributes":{"text":"Basic SmilesDrawer Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1071","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",["O=C1CCCN1C","c1ccccc1.c1ccccc1O","CN1C(=O)N(C)c2ncn(C)c2C1(=O)","C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1072","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1073"}}},"glyph":{"type":"object","name":"Scatter","id":"p1068","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1069","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1070","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1049","attributes":{"tools":[{"type":"object","name":"bokehmol.models.smilesdrawer_hover.SmilesDrawerHover","id":"p1062","attributes":{"renderers":"auto"}},{"type":"object","name":"PanTool","id":"p1063"},{"type":"object","name":"WheelZoomTool","id":"p1064","attributes":{"renderers":"auto"}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1057","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1058","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1059"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1060"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1052","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1053","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1054"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1055"}}}],"center":[{"type":"object","name":"Grid","id":"p1056","attributes":{"axis":{"id":"p1052"}}},{"type":"object","name":"Grid","id":"p1061","attributes":{"dimension":1,"axis":{"id":"p1057"}}}],"background_fill_color":"#efefef"}}]}}
+<div data-root-id="p1040" id="b4872dee-aa8f-41f8-a01c-07d1f8d5be5b" style="display: contents;"></div>
+<script id="c382387d-1628-4699-ab50-10e0b668ad15" type="application/json">
+      {"81305ab2-9643-4147-a806-6140de6d65bf":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1040","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1041"},"y_range":{"type":"object","name":"DataRange1d","id":"p1042"},"x_scale":{"type":"object","name":"LinearScale","id":"p1050"},"y_scale":{"type":"object","name":"LinearScale","id":"p1051"},"title":{"type":"object","name":"Title","id":"p1043","attributes":{"text":"Basic SmilesDrawer Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1071","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",[["O=C1CCCN1C","O=C1CC(C)CN1C"],"c1ccccc1.c1ccccc1O",["CN1C(=O)N(C)c2ncn(C)c2C1(=O)","O=C1CCCN1C.O=C1CC(C)CN1C"],"C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1072","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1073"}}},"glyph":{"type":"object","name":"Scatter","id":"p1068","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1069","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1070","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1049","attributes":{"tools":[{"type":"object","name":"bokehmol.models.smilesdrawer_hover.SmilesDrawerHover","id":"p1062","attributes":{"renderers":"auto"}},{"type":"object","name":"PanTool","id":"p1063"},{"type":"object","name":"WheelZoomTool","id":"p1064","attributes":{"renderers":"auto"}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1057","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1058","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1059"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1060"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1052","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1053","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1054"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1055"}}}],"center":[{"type":"object","name":"Grid","id":"p1056","attributes":{"axis":{"id":"p1052"}}},{"type":"object","name":"Grid","id":"p1061","attributes":{"dimension":1,"axis":{"id":"p1057"}}}],"background_fill_color":"#efefef"}}]}}
     </script>
 <script type="text/javascript">
       (function() {
@@ -7765,8 +7899,8 @@ a.anchor-link {
           Bokeh.safely(function() {
             (function(root) {
               function embed_document(root) {
-              const docs_json = document.getElementById('e47c99fa-586c-46fb-b73c-9068b31ec0dc').textContent;
-              const render_items = [{"docid":"850fb83d-65ab-4c01-aa0e-b6dc09294b1a","roots":{"p1040":"b4d4d4b3-7299-49c6-889b-eeb52b977bf1"},"root_ids":["p1040"]}];
+              const docs_json = document.getElementById('c382387d-1628-4699-ab50-10e0b668ad15').textContent;
+              const render_items = [{"docid":"81305ab2-9643-4147-a806-6140de6d65bf","roots":{"p1040":"b4872dee-aa8f-41f8-a01c-07d1f8d5be5b"},"root_ids":["p1040"]}];
               root.Bokeh.embed.embed_items(docs_json, render_items);
               }
               if (root.Bokeh !== undefined) {
@@ -7832,7 +7966,10 @@ a.anchor-link {
     <span class="p">],</span>
     <span class="n">draw_options</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">"comicMode"</span><span class="p">:</span> <span class="kc">True</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">mols_per_row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plot</span><span class="o">.</span><span class="n">add_tools</span><span class="p">(</span><span class="n">mol_hover</span><span class="p">)</span>
@@ -7871,13 +8008,70 @@ a.anchor-link {
 <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.7.3.min.js" type="text/javascript"></script>
 <script src="https://unpkg.com/bokehmol@0.1.2-a3/dist/bokehmol.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+        'use strict';
+/*!
+ * Copyright (c) Anaconda, Inc., and Bokeh Contributors
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * Neither the name of Anaconda nor the names of any contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+(function(root, factory) {
+  factory(root["Bokeh"], undefined);
+})(this, function(Bokeh, version) {
+  let define;
+  return (function(modules, entry, aliases, externals) {
+    const bokeh = typeof Bokeh !== "undefined" ? (version != null ? Bokeh[version] : Bokeh) : null;
+    if (bokeh != null) {
+      return bokeh.register_plugin(modules, entry, aliases);
+    } else {
+      throw new Error("Cannot find Bokeh" + (version != null ? " " + version : "") + ". You have to load it prior to loading plugins.");
+    }
+  })
+({
+"c27055c896": function _(e,o,b,s,t){s();const i=e("tslib").__importStar(e("2fbbcedd89"));b.bokehmol=i;(0,e("@bokehjs/base").register_models)(i)},
+"2fbbcedd89": function _(e,r,a,t,o){t(),o("BaseFormatter",e("bdbba644e6").BaseFormatter),o("BaseHover",e("b3aabca0fa").BaseHover),o("RDKitFormatter",e("66b72b8836").RDKitFormatter),o("RDKitHover",e("db381e1cc8").RDKitHover),o("SmilesDrawerFormatter",e("be6f45e05e").SmilesDrawerFormatter),o("SmilesDrawerHover",e("6c967671db").SmilesDrawerHover)},
+"bdbba644e6": function _(t,e,r,s,o){var i;s();const h=t("@bokehjs/models/tools/inspectors/customjs_hover"),n=t("01840ae548");class m extends h.CustomJSHover{constructor(t){super(t)}makeSVGElement(){const t=document.createElementNS("http://www.w3.org/2000/svg","svg");return t.setAttribute("xmlns","http://www.w3.org/2000/svg"),t.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink"),t.setAttributeNS(null,"width",""+this.width),t.setAttributeNS(null,"height",""+this.height),t}draw_grid(t){const e=[];return t.forEach((t=>{let r=this.draw_svg(t);e.push(r)})),(0,n.combineSVGs)(e,this.width,this.height,this.mols_per_row)}draw_svg(t){const e=this.makeSVGElement(),r=e.outerHTML;return e.remove(),r}format(t,e,r){return Array.isArray(t)?this.draw_grid(t):this.draw_svg(t)}}r.BaseFormatter=m,i=m,m.__name__="BaseFormatter",m.__module__="bokehmol.models.base_formatter",i.define((({Int:t})=>({width:[t,160],height:[t,120],mols_per_row:[t,5]})))},
+"01840ae548": function _(e,t,a,l,i){l(),a.combineSVGs=function(e,t,a,l){let i=[],n=t,s=a;const h=new DOMParser;for(let g=0;g<e.length;g++){let r=e[g],o=t,m=a;if(t<0||a<0){let e=h.parseFromString(r,"image/svg+xml").firstChild;t<0&&(o=e.width.baseVal.value,o>n?n=o:o=n),a<0&&(m=e.height.baseVal.value),m>s?s=m:m=s}let f=o*(g%l),c=m*Math.floor(g/l),u=btoa(r);i.push(`<image id="molecule-${g}" transform="translate(${f},${c})" href='data:image/svg+xml;base64,${u}'></image>`)}const g=n*Math.min(l,e.length),r=s*Math.ceil(e.length/l);return`<svg width="${g}" height="${r}">${i.join("\n")}</svg>`}},
+"b3aabca0fa": function _(e,i,o,I,t){var s;I();const A=e("@bokehjs/core/dom"),r=e("@bokehjs/core/util/templating"),l=e("@bokehjs/core/util/types"),h=e("@bokehjs/models/tools/inspectors/hover_tool"),_=e("@bokehjs/styles/icons.css");class n extends h.HoverToolView{_render_tooltips(e,i){const{tooltips:o,smiles_column:I}=this.model,t=i.index;let s=o;if(null===s&&(s=""),!(0,l.isString)(s)){const o=this._template_el??(this._template_el=this._create_template(s));s=this._render_template(o,s,e,i).outerHTML}const h="<div>@"+I+"{custom}</div>"+s,_=(0,r.replace_placeholders)({html:h},e,t,this.model.formatters,i);return(0,A.div)(_)}}o.BaseHoverView=n,n.__name__="BaseHoverView";class a extends h.HoverTool{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAt1BMVEUAAAAAAAArKyskJCQcHBwrKyscHBwmJiYjIyMhISEgICAfHx8dHR0kJCQiIiIhISEhISEgICAkJCQkJCQjIyMiIiIiIiIhISEkJCQjIyMiIiIiIiIjIyMjIyMkJCQjIyMiIiIkJCQhISEjIyMiIiIiIiIiIiIkJCQjIyMiIiIiIiIiIiIiIiIhISEjIyMjIyMiIiIiIiIjIyMiIiIiIiIhISEiIiIiIiIiIiIiIiIhISEjIyP///9o30WSAAAAPHRSTlMAAQYHCQwSFBYXGBkaKy0uLzAxMjM0NTY5UVJTV1hdYHJyc3V3eHmBk5SVlpeZmpucnaqtrrCytLa7wMBTv07WAAAAAWJLR0Q8p2phzwAAAKRJREFUGBmtwQkagUAAgNF/ZAtZo2yRIrusofvfi+ab0gG8xx85gS8FDjlabJuS/db4WQ1RRksy+p3ZRZpxbZA6t8gYJxRzTc7WQhKPCjnlSJDwXEIdRQ9xPRKeS+eAcurjeiTEo8JhgNTdU44EUm9D9SlIRDV2FkrYZjHhazrHOJLS7xReRSi+CtzqZJYjmiUoNRn7/GixbUr2WyPHCXwpcPifD0UBD3u/QqniAAAAAElFTkSuQmCC"}constructor(e){super(e),this.tool_icon=_.tool_icon_hover}}o.BaseHover=a,s=a,a.__name__="BaseHover",a.__module__="bokehmol.models.base_hover",s.prototype.default_view=n,s.define((({Str:e,Int:i})=>({smiles_column:[e,"SMILES"],width:[i,160],height:[i,120],mols_per_row:[i,3]}))),s.override({tooltips:[]})},
+"66b72b8836": function _(t,i,e,s,o){var n;s();const r=t("bdbba644e6");class d extends r.BaseFormatter{constructor(t){super(t)}initialize(){super.initialize(),this.onRDKitReady(!0,!1,(()=>{initRDKitModule().then((t=>{this.RDKitModule=t,console.log("RDKit version: "+t.version())}))}))}onRDKitReady(t,i,e){this.hasLoadedRDKit(t,i)?e():setTimeout((()=>{this.onRDKitReady(t,i,e)}),100)}hasLoadedRDKit(t,i){return!(t&&"undefined"==typeof initRDKitModule||i&&void 0===this.RDKitModule)}setupRDKitOptions(){return this.onRDKitReady(!0,!0,(()=>{this.RDKitModule.prefer_coordgen(this.prefer_coordgen)})),this.json_mol_opts=JSON.stringify({removeHs:this.remove_hs,sanitize:this.sanitize,kekulize:this.kekulize}),this.json_draw_opts=JSON.stringify({width:this.width,height:this.height,...this.draw_options}),this.json_draw_opts}draw_svg(t){const i=this.json_draw_opts??this.setupRDKitOptions();var e;if(this.onRDKitReady(!0,!0,(()=>{e=this.RDKitModule.get_mol(t,this.json_mol_opts)})),void 0===e)console.log("Attempting to display structures before RDKit has been loaded.");else if(null!==e&&e.is_valid()){const t=e.get_svg_with_highlights(i);return e.delete(),t}return super.draw_svg(t)}}e.RDKitFormatter=d,n=d,d.__name__="RDKitFormatter",d.__module__="bokehmol.models.rdkit_formatter",n.define((({Bool:t,Dict:i,Unknown:e})=>({prefer_coordgen:[t,!0],remove_hs:[t,!0],sanitize:[t,!0],kekulize:[t,!0],draw_options:[i(e),{}]})))},
+"db381e1cc8": function _(A,e,o,i,t){var r;i();const s=A("b3aabca0fa"),n=A("66b72b8836");class _ extends s.BaseHoverView{initialize(){super.initialize();const{formatters:A,smiles_column:e,width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d}=this.model;A["@"+e]=new n.RDKitFormatter({width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d})}}o.RDKitHoverView=_,_.__name__="RDKitHoverView";class a extends s.BaseHover{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC"}constructor(A){super(A),this.tool_name="RDKit Hover"}}o.RDKitHover=a,r=a,a.__name__="RDKitHover",a.__module__="bokehmol.models.rdkit_hover",r.prototype.default_view=_,r.define((({Bool:A,Dict:e,Unknown:o})=>({prefer_coordgen:[A,!0],remove_hs:[A,!0],sanitize:[A,!0],kekulize:[A,!0],draw_options:[e(o),{}]}))),r.register_alias("rdkit_hover",(()=>new r))},
+"be6f45e05e": function _(e,r,t,i,a){var o;i();const s=e("bdbba644e6");class n extends s.BaseFormatter{constructor(e){super(e)}initialize(){super.initialize(),this.onSmiDrawerReady(!0,!1,(()=>{this.SmiDrawer=SmiDrawer}))}onSmiDrawerReady(e,r,t){this.hasLoadedSmiDrawer(e,r)?t():setTimeout((()=>{this.onSmiDrawerReady(e,r,t)}),100)}hasLoadedSmiDrawer(e,r){return!(e&&"undefined"==typeof SmiDrawer||r&&void 0===this.SmiDrawer)}makeSVGElement(){const e=super.makeSVGElement();return e.style.backgroundColor=this.background_colour,e}setupDrawer(){return this.onSmiDrawerReady(!0,!0,(()=>{this.drawer=new this.SmiDrawer(this.mol_options,this.reaction_options)})),this.drawer}draw_svg(e){const r=this.makeSVGElement();this.onSmiDrawerReady(!0,!0,(()=>{(this.drawer??this.setupDrawer()).draw(e,r,this.theme)}));const t=r.outerHTML;return r.remove(),t}}t.SmilesDrawerFormatter=n,o=n,n.__name__="SmilesDrawerFormatter",n.__module__="bokehmol.models.smilesdrawer_formatter",o.define((({Str:e,Dict:r,Unknown:t})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[r(t),{}],reaction_options:[r(t),{}]})))},
+"6c967671db": function _(e,o,r,i,t){var s;i();const a=e("b3aabca0fa"),n=e("be6f45e05e");class _ extends a.BaseHoverView{initialize(){super.initialize();const{formatters:e,smiles_column:o,width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l}=this.model;e["@"+o]=new n.SmilesDrawerFormatter({width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l})}}r.SmilesDrawerHoverView=_,_.__name__="SmilesDrawerHoverView";class l extends a.BaseHover{constructor(e){super(e),this.tool_name="SmilesDrawer Hover"}}r.SmilesDrawerHover=l,s=l,l.__name__="SmilesDrawerHover",l.__module__="bokehmol.models.smilesdrawer_hover",s.prototype.default_view=_,s.define((({Str:e,Dict:o,Unknown:r})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[o(r),{}],reaction_options:[o(r),{}]}))),s.register_alias("smiles_hover",(()=>new s))},
+}, "c27055c896", {"index":"c27055c896","models/index":"2fbbcedd89","models/base_formatter":"bdbba644e6","models/combinesvg":"01840ae548","models/base_hover":"b3aabca0fa","models/rdkit_formatter":"66b72b8836","models/rdkit_hover":"db381e1cc8","models/smilesdrawer_formatter":"be6f45e05e","models/smilesdrawer_hover":"6c967671db"}, {});});
+
+    </script>
+<script type="text/javascript">
         Bokeh.set_log_level("info");
     </script>
 </head>
 <body>
-<div data-root-id="p1074" id="c02e2cfd-0360-4ddb-b818-dcc126a7d7e4" style="display: contents;"></div>
-<script id="f21b3592-9b51-45be-8477-455744720830" type="application/json">
-      {"f1c77516-95f6-4ad9-ae65-44cdc6a1687c":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1074","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1075"},"y_range":{"type":"object","name":"DataRange1d","id":"p1076"},"x_scale":{"type":"object","name":"LinearScale","id":"p1084"},"y_scale":{"type":"object","name":"LinearScale","id":"p1085"},"title":{"type":"object","name":"Title","id":"p1077","attributes":{"text":"Configured RDKit Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1105","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",["O=C1CCCN1C","c1ccccc1.c1ccccc1O","CN1C(=O)N(C)c2ncn(C)c2C1(=O)","C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1106","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1107"}}},"glyph":{"type":"object","name":"Scatter","id":"p1102","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1103","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1104","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1083","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p1096"},{"type":"object","name":"WheelZoomTool","id":"p1097","attributes":{"renderers":"auto"}},{"type":"object","name":"bokehmol.models.rdkit_hover.RDKitHover","id":"p1098","attributes":{"renderers":"auto","tooltips":[["smiles","@SMILES"]],"draw_options":{"type":"map","entries":[["comicMode",true]]}}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1091","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1092","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1093"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1094"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1086","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1087","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1088"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1089"}}}],"center":[{"type":"object","name":"Grid","id":"p1090","attributes":{"axis":{"id":"p1086"}}},{"type":"object","name":"Grid","id":"p1095","attributes":{"dimension":1,"axis":{"id":"p1091"}}}],"background_fill_color":"#efefef"}}]}}
+<div data-root-id="p1074" id="f06e1fd8-6364-45b9-b62b-16f698623db4" style="display: contents;"></div>
+<script id="ab0fb3d7-b1aa-4bd4-be2b-0fc654675f85" type="application/json">
+      {"938b964c-4946-4184-a48b-e2f20976f21b":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1074","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1075"},"y_range":{"type":"object","name":"DataRange1d","id":"p1076"},"x_scale":{"type":"object","name":"LinearScale","id":"p1084"},"y_scale":{"type":"object","name":"LinearScale","id":"p1085"},"title":{"type":"object","name":"Title","id":"p1077","attributes":{"text":"Configured RDKit Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1105","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",[["O=C1CCCN1C","O=C1CC(C)CN1C"],"c1ccccc1.c1ccccc1O",["CN1C(=O)N(C)c2ncn(C)c2C1(=O)","O=C1CCCN1C.O=C1CC(C)CN1C"],"C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1106","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1107"}}},"glyph":{"type":"object","name":"Scatter","id":"p1102","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1103","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1104","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1083","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p1096"},{"type":"object","name":"WheelZoomTool","id":"p1097","attributes":{"renderers":"auto"}},{"type":"object","name":"bokehmol.models.rdkit_hover.RDKitHover","id":"p1098","attributes":{"renderers":"auto","tooltips":[["smiles","@SMILES"]],"width":-1,"height":-1,"mols_per_row":1,"draw_options":{"type":"map","entries":[["comicMode",true]]}}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1091","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1092","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1093"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1094"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1086","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1087","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1088"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1089"}}}],"center":[{"type":"object","name":"Grid","id":"p1090","attributes":{"axis":{"id":"p1086"}}},{"type":"object","name":"Grid","id":"p1095","attributes":{"dimension":1,"axis":{"id":"p1091"}}}],"background_fill_color":"#efefef"}}]}}
     </script>
 <script type="text/javascript">
       (function() {
@@ -7885,8 +8079,8 @@ a.anchor-link {
           Bokeh.safely(function() {
             (function(root) {
               function embed_document(root) {
-              const docs_json = document.getElementById('f21b3592-9b51-45be-8477-455744720830').textContent;
-              const render_items = [{"docid":"f1c77516-95f6-4ad9-ae65-44cdc6a1687c","roots":{"p1074":"c02e2cfd-0360-4ddb-b818-dcc126a7d7e4"},"root_ids":["p1074"]}];
+              const docs_json = document.getElementById('ab0fb3d7-b1aa-4bd4-be2b-0fc654675f85').textContent;
+              const render_items = [{"docid":"938b964c-4946-4184-a48b-e2f20976f21b","roots":{"p1074":"f06e1fd8-6364-45b9-b62b-16f698623db4"},"root_ids":["p1074"]}];
               root.Bokeh.embed.embed_items(docs_json, render_items);
               }
               if (root.Bokeh !== undefined) {
@@ -7947,6 +8141,7 @@ bokehmol.hover.rdkit(
     tooltips: Union[str, List[Tuple[str, str]], NoneType] = <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>,
     width: int = <span class="ansi-green-fg">160</span>,
     height: int = <span class="ansi-green-fg">120</span>,
+    mols_per_row: int = <span class="ansi-green-fg">3</span>,
     remove_hs: bool = <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>,
     sanitize: bool = <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>,
     kekulize: bool = <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>,
@@ -7983,6 +8178,8 @@ width: int = 160
     Image width in pixels
 height: int = 120
     Image height in pixels
+mols_per_row: int = 3
+    Number of molecules to display per row if a list of SMILES is used.
 remove_hs: bool = True
     Remove hydrogens from the depiction
 sanitize: bool = True
@@ -8012,7 +8209,7 @@ An RDKit-based hover tool ready to be added to a bokeh plot::
     &gt;&gt;&gt; plot = figure(...)
     &gt;&gt;&gt; hover_tool = bokehmol.hover.rdkit()
     &gt;&gt;&gt; plot.add_tools(hover_tool)
-<span class="ansi-red-fg">File:</span>      ~/dev/bokehmol/.venv/lib/python3.12/site-packages/bokehmol/hover.py
+<span class="ansi-red-fg">File:</span>      ~/dev/bokehmol/bokehmol/hover.py
 <span class="ansi-red-fg">Type:</span>      function</pre>
 </div>
 </div>
@@ -8053,7 +8250,8 @@ An RDKit-based hover tool ready to be added to a bokeh plot::
     <span class="n">background_colour</span><span class="o">=</span><span class="s2">"#3d3d3b"</span><span class="p">,</span>
     <span class="n">mol_options</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">"atomVisualization"</span><span class="p">:</span> <span class="s2">"balls"</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">mols_per_row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plot</span><span class="o">.</span><span class="n">add_tools</span><span class="p">(</span><span class="n">mol_hover</span><span class="p">)</span>
@@ -8092,13 +8290,70 @@ An RDKit-based hover tool ready to be added to a bokeh plot::
 <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.7.3.min.js" type="text/javascript"></script>
 <script src="https://unpkg.com/bokehmol@0.1.2-a3/dist/bokehmol.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+        'use strict';
+/*!
+ * Copyright (c) Anaconda, Inc., and Bokeh Contributors
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * Neither the name of Anaconda nor the names of any contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+(function(root, factory) {
+  factory(root["Bokeh"], undefined);
+})(this, function(Bokeh, version) {
+  let define;
+  return (function(modules, entry, aliases, externals) {
+    const bokeh = typeof Bokeh !== "undefined" ? (version != null ? Bokeh[version] : Bokeh) : null;
+    if (bokeh != null) {
+      return bokeh.register_plugin(modules, entry, aliases);
+    } else {
+      throw new Error("Cannot find Bokeh" + (version != null ? " " + version : "") + ". You have to load it prior to loading plugins.");
+    }
+  })
+({
+"c27055c896": function _(e,o,b,s,t){s();const i=e("tslib").__importStar(e("2fbbcedd89"));b.bokehmol=i;(0,e("@bokehjs/base").register_models)(i)},
+"2fbbcedd89": function _(e,r,a,t,o){t(),o("BaseFormatter",e("bdbba644e6").BaseFormatter),o("BaseHover",e("b3aabca0fa").BaseHover),o("RDKitFormatter",e("66b72b8836").RDKitFormatter),o("RDKitHover",e("db381e1cc8").RDKitHover),o("SmilesDrawerFormatter",e("be6f45e05e").SmilesDrawerFormatter),o("SmilesDrawerHover",e("6c967671db").SmilesDrawerHover)},
+"bdbba644e6": function _(t,e,r,s,o){var i;s();const h=t("@bokehjs/models/tools/inspectors/customjs_hover"),n=t("01840ae548");class m extends h.CustomJSHover{constructor(t){super(t)}makeSVGElement(){const t=document.createElementNS("http://www.w3.org/2000/svg","svg");return t.setAttribute("xmlns","http://www.w3.org/2000/svg"),t.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink"),t.setAttributeNS(null,"width",""+this.width),t.setAttributeNS(null,"height",""+this.height),t}draw_grid(t){const e=[];return t.forEach((t=>{let r=this.draw_svg(t);e.push(r)})),(0,n.combineSVGs)(e,this.width,this.height,this.mols_per_row)}draw_svg(t){const e=this.makeSVGElement(),r=e.outerHTML;return e.remove(),r}format(t,e,r){return Array.isArray(t)?this.draw_grid(t):this.draw_svg(t)}}r.BaseFormatter=m,i=m,m.__name__="BaseFormatter",m.__module__="bokehmol.models.base_formatter",i.define((({Int:t})=>({width:[t,160],height:[t,120],mols_per_row:[t,5]})))},
+"01840ae548": function _(e,t,a,l,i){l(),a.combineSVGs=function(e,t,a,l){let i=[],n=t,s=a;const h=new DOMParser;for(let g=0;g<e.length;g++){let r=e[g],o=t,m=a;if(t<0||a<0){let e=h.parseFromString(r,"image/svg+xml").firstChild;t<0&&(o=e.width.baseVal.value,o>n?n=o:o=n),a<0&&(m=e.height.baseVal.value),m>s?s=m:m=s}let f=o*(g%l),c=m*Math.floor(g/l),u=btoa(r);i.push(`<image id="molecule-${g}" transform="translate(${f},${c})" href='data:image/svg+xml;base64,${u}'></image>`)}const g=n*Math.min(l,e.length),r=s*Math.ceil(e.length/l);return`<svg width="${g}" height="${r}">${i.join("\n")}</svg>`}},
+"b3aabca0fa": function _(e,i,o,I,t){var s;I();const A=e("@bokehjs/core/dom"),r=e("@bokehjs/core/util/templating"),l=e("@bokehjs/core/util/types"),h=e("@bokehjs/models/tools/inspectors/hover_tool"),_=e("@bokehjs/styles/icons.css");class n extends h.HoverToolView{_render_tooltips(e,i){const{tooltips:o,smiles_column:I}=this.model,t=i.index;let s=o;if(null===s&&(s=""),!(0,l.isString)(s)){const o=this._template_el??(this._template_el=this._create_template(s));s=this._render_template(o,s,e,i).outerHTML}const h="<div>@"+I+"{custom}</div>"+s,_=(0,r.replace_placeholders)({html:h},e,t,this.model.formatters,i);return(0,A.div)(_)}}o.BaseHoverView=n,n.__name__="BaseHoverView";class a extends h.HoverTool{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAt1BMVEUAAAAAAAArKyskJCQcHBwrKyscHBwmJiYjIyMhISEgICAfHx8dHR0kJCQiIiIhISEhISEgICAkJCQkJCQjIyMiIiIiIiIhISEkJCQjIyMiIiIiIiIjIyMjIyMkJCQjIyMiIiIkJCQhISEjIyMiIiIiIiIiIiIkJCQjIyMiIiIiIiIiIiIiIiIhISEjIyMjIyMiIiIiIiIjIyMiIiIiIiIhISEiIiIiIiIiIiIiIiIhISEjIyP///9o30WSAAAAPHRSTlMAAQYHCQwSFBYXGBkaKy0uLzAxMjM0NTY5UVJTV1hdYHJyc3V3eHmBk5SVlpeZmpucnaqtrrCytLa7wMBTv07WAAAAAWJLR0Q8p2phzwAAAKRJREFUGBmtwQkagUAAgNF/ZAtZo2yRIrusofvfi+ab0gG8xx85gS8FDjlabJuS/db4WQ1RRksy+p3ZRZpxbZA6t8gYJxRzTc7WQhKPCjnlSJDwXEIdRQ9xPRKeS+eAcurjeiTEo8JhgNTdU44EUm9D9SlIRDV2FkrYZjHhazrHOJLS7xReRSi+CtzqZJYjmiUoNRn7/GixbUr2WyPHCXwpcPifD0UBD3u/QqniAAAAAElFTkSuQmCC"}constructor(e){super(e),this.tool_icon=_.tool_icon_hover}}o.BaseHover=a,s=a,a.__name__="BaseHover",a.__module__="bokehmol.models.base_hover",s.prototype.default_view=n,s.define((({Str:e,Int:i})=>({smiles_column:[e,"SMILES"],width:[i,160],height:[i,120],mols_per_row:[i,3]}))),s.override({tooltips:[]})},
+"66b72b8836": function _(t,i,e,s,o){var n;s();const r=t("bdbba644e6");class d extends r.BaseFormatter{constructor(t){super(t)}initialize(){super.initialize(),this.onRDKitReady(!0,!1,(()=>{initRDKitModule().then((t=>{this.RDKitModule=t,console.log("RDKit version: "+t.version())}))}))}onRDKitReady(t,i,e){this.hasLoadedRDKit(t,i)?e():setTimeout((()=>{this.onRDKitReady(t,i,e)}),100)}hasLoadedRDKit(t,i){return!(t&&"undefined"==typeof initRDKitModule||i&&void 0===this.RDKitModule)}setupRDKitOptions(){return this.onRDKitReady(!0,!0,(()=>{this.RDKitModule.prefer_coordgen(this.prefer_coordgen)})),this.json_mol_opts=JSON.stringify({removeHs:this.remove_hs,sanitize:this.sanitize,kekulize:this.kekulize}),this.json_draw_opts=JSON.stringify({width:this.width,height:this.height,...this.draw_options}),this.json_draw_opts}draw_svg(t){const i=this.json_draw_opts??this.setupRDKitOptions();var e;if(this.onRDKitReady(!0,!0,(()=>{e=this.RDKitModule.get_mol(t,this.json_mol_opts)})),void 0===e)console.log("Attempting to display structures before RDKit has been loaded.");else if(null!==e&&e.is_valid()){const t=e.get_svg_with_highlights(i);return e.delete(),t}return super.draw_svg(t)}}e.RDKitFormatter=d,n=d,d.__name__="RDKitFormatter",d.__module__="bokehmol.models.rdkit_formatter",n.define((({Bool:t,Dict:i,Unknown:e})=>({prefer_coordgen:[t,!0],remove_hs:[t,!0],sanitize:[t,!0],kekulize:[t,!0],draw_options:[i(e),{}]})))},
+"db381e1cc8": function _(A,e,o,i,t){var r;i();const s=A("b3aabca0fa"),n=A("66b72b8836");class _ extends s.BaseHoverView{initialize(){super.initialize();const{formatters:A,smiles_column:e,width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d}=this.model;A["@"+e]=new n.RDKitFormatter({width:o,height:i,mols_per_row:t,prefer_coordgen:r,remove_hs:s,sanitize:_,kekulize:a,draw_options:d})}}o.RDKitHoverView=_,_.__name__="RDKitHoverView";class a extends s.BaseHover{get computed_icon(){return"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC"}constructor(A){super(A),this.tool_name="RDKit Hover"}}o.RDKitHover=a,r=a,a.__name__="RDKitHover",a.__module__="bokehmol.models.rdkit_hover",r.prototype.default_view=_,r.define((({Bool:A,Dict:e,Unknown:o})=>({prefer_coordgen:[A,!0],remove_hs:[A,!0],sanitize:[A,!0],kekulize:[A,!0],draw_options:[e(o),{}]}))),r.register_alias("rdkit_hover",(()=>new r))},
+"be6f45e05e": function _(e,r,t,i,a){var o;i();const s=e("bdbba644e6");class n extends s.BaseFormatter{constructor(e){super(e)}initialize(){super.initialize(),this.onSmiDrawerReady(!0,!1,(()=>{this.SmiDrawer=SmiDrawer}))}onSmiDrawerReady(e,r,t){this.hasLoadedSmiDrawer(e,r)?t():setTimeout((()=>{this.onSmiDrawerReady(e,r,t)}),100)}hasLoadedSmiDrawer(e,r){return!(e&&"undefined"==typeof SmiDrawer||r&&void 0===this.SmiDrawer)}makeSVGElement(){const e=super.makeSVGElement();return e.style.backgroundColor=this.background_colour,e}setupDrawer(){return this.onSmiDrawerReady(!0,!0,(()=>{this.drawer=new this.SmiDrawer(this.mol_options,this.reaction_options)})),this.drawer}draw_svg(e){const r=this.makeSVGElement();this.onSmiDrawerReady(!0,!0,(()=>{(this.drawer??this.setupDrawer()).draw(e,r,this.theme)}));const t=r.outerHTML;return r.remove(),t}}t.SmilesDrawerFormatter=n,o=n,n.__name__="SmilesDrawerFormatter",n.__module__="bokehmol.models.smilesdrawer_formatter",o.define((({Str:e,Dict:r,Unknown:t})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[r(t),{}],reaction_options:[r(t),{}]})))},
+"6c967671db": function _(e,o,r,i,t){var s;i();const a=e("b3aabca0fa"),n=e("be6f45e05e");class _ extends a.BaseHoverView{initialize(){super.initialize();const{formatters:e,smiles_column:o,width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l}=this.model;e["@"+o]=new n.SmilesDrawerFormatter({width:r,height:i,mols_per_row:t,theme:s,background_colour:a,mol_options:_,reaction_options:l})}}r.SmilesDrawerHoverView=_,_.__name__="SmilesDrawerHoverView";class l extends a.BaseHover{constructor(e){super(e),this.tool_name="SmilesDrawer Hover"}}r.SmilesDrawerHover=l,s=l,l.__name__="SmilesDrawerHover",l.__module__="bokehmol.models.smilesdrawer_hover",s.prototype.default_view=_,s.define((({Str:e,Dict:o,Unknown:r})=>({theme:[e,"light"],background_colour:[e,"transparent"],mol_options:[o(r),{}],reaction_options:[o(r),{}]}))),s.register_alias("smiles_hover",(()=>new s))},
+}, "c27055c896", {"index":"c27055c896","models/index":"2fbbcedd89","models/base_formatter":"bdbba644e6","models/combinesvg":"01840ae548","models/base_hover":"b3aabca0fa","models/rdkit_formatter":"66b72b8836","models/rdkit_hover":"db381e1cc8","models/smilesdrawer_formatter":"be6f45e05e","models/smilesdrawer_hover":"6c967671db"}, {});});
+
+    </script>
+<script type="text/javascript">
         Bokeh.set_log_level("info");
     </script>
 </head>
 <body>
-<div data-root-id="p1108" id="d1ad1b34-f1c3-4256-bf51-09e5321221bc" style="display: contents;"></div>
-<script id="ab4d1c63-246e-4a8b-84ef-9394e78ad16f" type="application/json">
-      {"7b6adcbc-a9c1-4477-9b32-dacc29a34a06":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1108","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1109"},"y_range":{"type":"object","name":"DataRange1d","id":"p1110"},"x_scale":{"type":"object","name":"LinearScale","id":"p1118"},"y_scale":{"type":"object","name":"LinearScale","id":"p1119"},"title":{"type":"object","name":"Title","id":"p1111","attributes":{"text":"Configured SmilesDrawer Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1139","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",["O=C1CCCN1C","c1ccccc1.c1ccccc1O","CN1C(=O)N(C)c2ncn(C)c2C1(=O)","C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1140","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1141"}}},"glyph":{"type":"object","name":"Scatter","id":"p1136","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1137","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1138","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1117","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p1130"},{"type":"object","name":"WheelZoomTool","id":"p1131","attributes":{"renderers":"auto"}},{"type":"object","name":"bokehmol.models.smilesdrawer_hover.SmilesDrawerHover","id":"p1132","attributes":{"renderers":"auto","tooltips":[["smiles","@SMILES"]],"theme":"cyberpunk","background_colour":"#3d3d3b","mol_options":{"type":"map","entries":[["atomVisualization","balls"]]}}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1125","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1126","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1127"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1128"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1120","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1121","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1122"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1123"}}}],"center":[{"type":"object","name":"Grid","id":"p1124","attributes":{"axis":{"id":"p1120"}}},{"type":"object","name":"Grid","id":"p1129","attributes":{"dimension":1,"axis":{"id":"p1125"}}}],"background_fill_color":"#efefef"}}]}}
+<div data-root-id="p1108" id="ccf2fbb2-7a7d-43ca-a960-c2a5406dde29" style="display: contents;"></div>
+<script id="cf83c0f2-0895-4dd4-bfb7-94b36cf70609" type="application/json">
+      {"12bb36c3-aea7-4e6c-affc-b3b8da1700ff":{"version":"3.7.3","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1108","attributes":{"height":300,"x_range":{"type":"object","name":"DataRange1d","id":"p1109"},"y_range":{"type":"object","name":"DataRange1d","id":"p1110"},"x_scale":{"type":"object","name":"LinearScale","id":"p1118"},"y_scale":{"type":"object","name":"LinearScale","id":"p1119"},"title":{"type":"object","name":"Title","id":"p1111","attributes":{"text":"Configured SmilesDrawer Hover"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1139","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1003","attributes":{"selected":{"type":"object","name":"Selection","id":"p1004","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1005"},"data":{"type":"map","entries":[["x",[1,2,3,4,5]],["y",[6,7,2,4,5]],["SMILES",[["O=C1CCCN1C","O=C1CC(C)CN1C"],"c1ccccc1.c1ccccc1O",["CN1C(=O)N(C)c2ncn(C)c2C1(=O)","O=C1CCCN1C.O=C1CC(C)CN1C"],"C1C(=O)C=C2CCC3C4CCC(C(=O)CO)C4(C)CCC3C2(C)C1","CC(=O)OC1=CC=CC=C1C(=O)O"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1140","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1141"}}},"glyph":{"type":"object","name":"Scatter","id":"p1136","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"}}},"nonselection_glyph":{"type":"object","name":"Scatter","id":"p1137","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Scatter","id":"p1138","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"line_width":{"type":"value","value":0},"fill_color":{"type":"value","value":"firebrick"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1117","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p1130"},{"type":"object","name":"WheelZoomTool","id":"p1131","attributes":{"renderers":"auto"}},{"type":"object","name":"bokehmol.models.smilesdrawer_hover.SmilesDrawerHover","id":"p1132","attributes":{"renderers":"auto","tooltips":[["smiles","@SMILES"]],"mols_per_row":1,"theme":"cyberpunk","background_colour":"#3d3d3b","mol_options":{"type":"map","entries":[["atomVisualization","balls"]]}}}]}},"left":[{"type":"object","name":"LinearAxis","id":"p1125","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1126","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1127"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1128"}}}],"below":[{"type":"object","name":"LinearAxis","id":"p1120","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1121","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1122"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1123"}}}],"center":[{"type":"object","name":"Grid","id":"p1124","attributes":{"axis":{"id":"p1120"}}},{"type":"object","name":"Grid","id":"p1129","attributes":{"dimension":1,"axis":{"id":"p1125"}}}],"background_fill_color":"#efefef"}}]}}
     </script>
 <script type="text/javascript">
       (function() {
@@ -8106,8 +8361,8 @@ An RDKit-based hover tool ready to be added to a bokeh plot::
           Bokeh.safely(function() {
             (function(root) {
               function embed_document(root) {
-              const docs_json = document.getElementById('ab4d1c63-246e-4a8b-84ef-9394e78ad16f').textContent;
-              const render_items = [{"docid":"7b6adcbc-a9c1-4477-9b32-dacc29a34a06","roots":{"p1108":"d1ad1b34-f1c3-4256-bf51-09e5321221bc"},"root_ids":["p1108"]}];
+              const docs_json = document.getElementById('cf83c0f2-0895-4dd4-bfb7-94b36cf70609').textContent;
+              const render_items = [{"docid":"12bb36c3-aea7-4e6c-affc-b3b8da1700ff","roots":{"p1108":"ccf2fbb2-7a7d-43ca-a960-c2a5406dde29"},"root_ids":["p1108"]}];
               root.Bokeh.embed.embed_items(docs_json, render_items);
               }
               if (root.Bokeh !== undefined) {
@@ -8168,6 +8423,7 @@ bokehmol.hover.smiles_drawer(
     tooltips: Union[str, List[Tuple[str, str]], NoneType] = <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>,
     width: int = <span class="ansi-green-fg">160</span>,
     height: int = <span class="ansi-green-fg">120</span>,
+    mols_per_row: int = <span class="ansi-green-fg">3</span>,
     theme: Literal[<span class="ansi-yellow-fg">'light'</span>, <span class="ansi-yellow-fg">'dark'</span>, <span class="ansi-yellow-fg">'oldschool'</span>, <span class="ansi-yellow-fg">'solarized'</span>, <span class="ansi-yellow-fg">'solarized-dark'</span>, <span class="ansi-yellow-fg">'matrix'</span>, <span class="ansi-yellow-fg">'github'</span>, <span class="ansi-yellow-fg">'carbon'</span>, <span class="ansi-yellow-fg">'cyberpunk'</span>, <span class="ansi-yellow-fg">'gruvbox'</span>, <span class="ansi-yellow-fg">'gruvbox-dark'</span>] = <span class="ansi-yellow-fg">'light'</span>,
     background_colour: str = <span class="ansi-yellow-fg">'transparent'</span>,
     mol_options: Optional[Dict[str, Any]] = <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>,
@@ -8204,6 +8460,8 @@ width: int = 160
     Image width in pixels
 height: int = 120
     Image height in pixels
+mols_per_row: int = 3
+    Number of molecules to display per row if a list of SMILES is used.
 theme: str = "light"
     Theme used for the rendering. One of the following list: light, dark,
     oldschool, solarized, solarized-dark, matrix, github, carbon, cyberpunk,
@@ -8233,7 +8491,7 @@ A SmilesDrawer-based hover tool ready to be added to a bokeh plot::
     &gt;&gt;&gt; plot = figure(...)
     &gt;&gt;&gt; hover_tool = bokehmol.hover.smiles_drawer()
     &gt;&gt;&gt; plot.add_tools(hover_tool)
-<span class="ansi-red-fg">File:</span>      ~/dev/bokehmol/.venv/lib/python3.12/site-packages/bokehmol/hover.py
+<span class="ansi-red-fg">File:</span>      ~/dev/bokehmol/bokehmol/hover.py
 <span class="ansi-red-fg">Type:</span>      function</pre>
 </div>
 </div>

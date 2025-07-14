@@ -1,5 +1,6 @@
 import {CustomJSHover} from "@bokehjs/models/tools/inspectors/customjs_hover"
 import type * as p from "@bokehjs/core/properties"
+import {combineSVGs} from "./combinesvg"
 
 export namespace BaseFormatter {
   export type Attrs = p.AttrsOf<Props>
@@ -7,6 +8,7 @@ export namespace BaseFormatter {
   export type Props = CustomJSHover.Props & {
     width: p.Property<number>
     height: p.Property<number>
+    mols_per_row: p.Property<number>
   }
 }
   
@@ -25,6 +27,7 @@ export class BaseFormatter extends CustomJSHover {
     this.define<BaseFormatter.Props>(({Int}) => ({
       width: [ Int, 160 ],
       height: [ Int, 120 ],
+      mols_per_row: [ Int, 5 ],
     }))
   }
 
@@ -37,6 +40,15 @@ export class BaseFormatter extends CustomJSHover {
     return svg
   }
 
+  draw_grid(smiles_array: string[]): string {
+    const images: string[] = []
+    smiles_array.forEach((smiles) => {
+      let svg = this.draw_svg(smiles)
+      images.push(svg)
+    })
+    return combineSVGs(images, this.width, this.height, this.mols_per_row) 
+  }
+
   // @ts-expect-error
   draw_svg(smiles: string): string {
     const el = this.makeSVGElement()
@@ -47,7 +59,7 @@ export class BaseFormatter extends CustomJSHover {
 
   override format(value: any, format: string, special_vars: {[key: string]: unknown}): string {
     format; special_vars;
-    return this.draw_svg(value)
+    return Array.isArray(value) ? this.draw_grid(value) : this.draw_svg(value)
   }
 
 }

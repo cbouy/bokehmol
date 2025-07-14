@@ -25,7 +25,7 @@ if __name__ == "__main__":
     from bokeh.plotting import figure, show
 
     source = ColumnDataSource(
-        data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=["CCO", "c1ccccc1", "[n]"])
+        data=dict(x=[1, 8, 3], y=[2, 5, 7], SMILES=[["CCO", "CC"], "c1ccccc1", "[n]"])
     )
 
     plot = figure(
@@ -57,6 +57,6 @@ if __name__ == "__main__":
         )
     )
 
-    plot.circle("x", "y", size=10, line_width=0, fill_color="red", source=source)
+    plot.scatter("x", "y", size=10, line_width=0, fill_color="red", source=source)
 
     show(plot)

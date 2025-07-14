@@ -8,7 +8,7 @@ export class RDKitHoverView extends BaseHoverView {
   override initialize(): void {
     super.initialize()
     const {
-      formatters, smiles_column, width, height, prefer_coordgen, 
+      formatters, smiles_column, width, height, mols_per_row, prefer_coordgen, 
       remove_hs, sanitize, kekulize, draw_options
     } = this.model
     // @ts-expect-error
@@ -16,6 +16,7 @@ export class RDKitHoverView extends BaseHoverView {
       {
         width: width,
         height: height,
+        mols_per_row: mols_per_row,
         prefer_coordgen: prefer_coordgen,
         remove_hs: remove_hs,
         sanitize: sanitize,

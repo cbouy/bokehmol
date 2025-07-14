@@ -68,6 +68,7 @@ export class BaseHover extends HoverTool {
       smiles_column: [ Str, "SMILES" ],
       width: [ Int, 160 ],
       height: [ Int, 120 ],
+      mols_per_row: [ Int, 3 ],
     }))
     this.override<BaseHover.Props>({
       tooltips: [],
